@@ -1,636 +1,1369 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Semena Center | Protecting Human Rights Defenders</title>
-    <meta name="description" content="Emergency protection, legal aid, rapid response, mental health support, and advocacy for human rights defenders.">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<!--
+  SEMENA CENTER — UX DECISIONS:
+  1. Navigation is hidden by default (3-dot menu only) so the interface is calm and non-overwhelming for users who may be in distress — content takes priority, not chrome.
+  2. No external resources, no tracking scripts, no cookies — the entire site is self-contained so visits leave no third-party data trail.
+  3. Scroll-reveal animations are intentionally gentle (fade + subtle lift) rather than dramatic, to maintain a safe, grounded feeling for users under stress.
+-->
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Semena Center — Protecting Human Rights Defenders</title>
+<style>
+/* ═══════════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════════ */
+:root {
+  --bg:           #FDFBF7;
+  --bg-warm:      #F7F3EC;
+  --bg-section:   #F2EDE4;
+  --card:         #FFFFFF;
+  --terra:        #C45F2C;
+  --terra-light:  #E07A47;
+  --terra-dim:    rgba(196,95,44,0.12);
+  --sage:         #5A6B4A;
+  --sage-light:   #7A8F68;
+  --sage-dim:     rgba(90,107,74,0.12);
+  --text:         #1F2A1F;
+  --text-2:       #4A5A3A;
+  --text-muted:   #7A8870;
+  --border:       rgba(90,107,74,0.18);
+  --shadow-sm:    0 2px 12px rgba(31,42,31,0.07);
+  --shadow-md:    0 8px 32px rgba(31,42,31,0.11);
+  --shadow-lg:    0 20px 60px rgba(31,42,31,0.14);
+  --radius:       16px;
+  --radius-sm:    10px;
+  --font-display: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+  --font-body:    'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
+  --ease:         cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        body {
-            background-color: #FEFCF5;  /* warm off-white base */
-            color: #1E2A1E;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            line-height: 1.5;
-            scroll-behavior: smooth;
-        }
+/* ═══════════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+a { color: var(--terra); text-decoration: none; }
+a:focus-visible { outline: 2px solid var(--terra); outline-offset: 3px; border-radius: 3px; }
+ul { list-style: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
 
-        /* Color grading: warm earth + deep green with amber accents */
-        :root {
-            --bg-main: #FEFCF5;
-            --bg-card: #FFFFFF;
-            --text-dark: #1E2A1E;
-            --text-soft: #3D4A3D;
-            --accent-amber: #C97E2E;
-            --accent-amber-light: #E6B87E;
-            --accent-moss: #5A6E4A;
-            --accent-moss-light: #7B9265;
-            --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0, 0, 0, 0.05);
-            --shadow-hover: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
+/* ═══════════════════════════════════════════════════
+   SKIP LINK
+═══════════════════════════════════════════════════ */
+.skip-link {
+  position: fixed; top: -100px; left: 1rem; z-index: 9999;
+  background: var(--terra); color: #fff;
+  padding: .5rem 1.25rem; border-radius: 6px;
+  font-weight: 700; font-size: .875rem;
+  transition: top .2s;
+}
+.skip-link:focus { top: 1rem; }
 
-        /* custom scroll */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #E9E5D8;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-moss);
-            border-radius: 12px;
-        }
+/* ═══════════════════════════════════════════════════
+   3-DOT HAMBURGER
+═══════════════════════════════════════════════════ */
+.menu-trigger {
+  position: fixed; top: 1.5rem; right: 1.75rem; z-index: 1000;
+  display: flex; flex-direction: column; gap: 5px;
+  padding: .7rem .65rem; border-radius: 50px;
+  background: var(--card);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow .25s var(--ease), transform .2s var(--ease);
+  cursor: pointer;
+  border: 1px solid var(--border);
+}
+.menu-trigger:hover { box-shadow: var(--shadow-lg); transform: scale(1.07); }
+.menu-trigger:focus-visible { outline: 2px solid var(--terra); outline-offset: 3px; }
 
-        /* layout */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--sage);
+  display: block;
+  transition: background .25s, transform .2s;
+}
+.menu-trigger[aria-expanded="true"] .dot { background: var(--terra); }
 
-        /* header + nav dots (hamburger) */
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: rgba(254, 252, 245, 0.92);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(90, 110, 74, 0.15);
-            padding: 0.9rem 0;
-        }
+/* snake-wiggle animation for each dot */
+@keyframes wiggle1 {
+  0%,100%   { transform: translateY(0); }
+  25%       { transform: translateY(-5px); }
+  50%       { transform: translateY(0); }
+}
+@keyframes wiggle2 {
+  0%,12%,100% { transform: translateY(0); }
+  37%          { transform: translateY(-5px); }
+  62%          { transform: translateY(0); }
+}
+@keyframes wiggle3 {
+  0%,25%,100% { transform: translateY(0); }
+  50%          { transform: translateY(-5px); }
+  75%          { transform: translateY(0); }
+}
+.dot-dance .dot:nth-child(1) { animation: wiggle1 .6s var(--ease); }
+.dot-dance .dot:nth-child(2) { animation: wiggle2 .7s var(--ease); }
+.dot-dance .dot:nth-child(3) { animation: wiggle3 .8s var(--ease); }
 
-        .header-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
+/* ═══════════════════════════════════════════════════
+   OVERLAY MENU
+═══════════════════════════════════════════════════ */
+.nav-overlay {
+  position: fixed; inset: 0 0 0 auto;
+  width: min(480px, 100vw);
+  background: var(--card);
+  z-index: 999;
+  box-shadow: -8px 0 60px rgba(31,42,31,0.18);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 4rem 3rem;
+  transform: translateX(100%);
+  transition: transform .45s cubic-bezier(0.77,0,0.18,1);
+  overflow-y: auto;
+}
+.nav-overlay.open { transform: translateX(0); }
 
-        .logo {
-            font-weight: 650;
-            font-size: 1.6rem;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #2C4A2E 0%, #5A6E4A 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            text-decoration: none;
-        }
+.nav-overlay-backdrop {
+  position: fixed; inset: 0; z-index: 998;
+  background: rgba(31,42,31,0.35);
+  backdrop-filter: blur(3px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s;
+}
+.nav-overlay-backdrop.open { opacity: 1; pointer-events: all; }
 
-        /* three dots hamburger */
-        .nav-dots {
-            cursor: pointer;
-            background: transparent;
-            border: none;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            padding: 8px 12px;
-            border-radius: 60px;
-            transition: var(--transition);
-        }
-        .nav-dots:hover {
-            background: rgba(90, 110, 74, 0.08);
-        }
-        .dot {
-            width: 6px;
-            height: 6px;
-            background-color: var(--accent-moss);
-            border-radius: 50%;
-            transition: transform 0.2s ease;
-        }
-        /* bounce animation every 7 seconds */
-        @keyframes bounceDots {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        .nav-dots.bounce .dot {
-            animation: bounceDots 0.35s ease-in-out;
-        }
-        .dot:nth-child(1) { animation-delay: 0s; }
-        .dot:nth-child(2) { animation-delay: 0.1s; }
-        .dot:nth-child(3) { animation-delay: 0.2s; }
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 1.15rem; color: var(--text);
+  margin-bottom: 2.5rem;
+  display: flex; align-items: center; gap: .65rem;
+}
+.nav-brand span { color: var(--text-muted); font-size: .75rem; display: block; letter-spacing: .08em; }
 
-        /* overlay menu */
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(30, 42, 30, 0.96);
-            backdrop-filter: blur(20px);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0s 0.4s;
-        }
-        .menu-overlay.open {
-            opacity: 1;
-            visibility: visible;
-            transition: opacity 0.4s ease, visibility 0s 0s;
-        }
-        .menu-links {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            text-align: center;
-        }
-        .menu-links a {
-            color: #FEFCF5;
-            font-size: 2rem;
-            font-weight: 500;
-            text-decoration: none;
-            letter-spacing: -0.01em;
-            transition: 0.2s;
-            border-bottom: 2px solid transparent;
-            display: inline-block;
-        }
-        .menu-links a:hover {
-            color: var(--accent-amber-light);
-            transform: scale(1.02);
-            border-bottom-color: var(--accent-amber);
-        }
-        .close-menu {
-            position: absolute;
-            top: 2rem;
-            right: 2.5rem;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 2.5rem;
-            cursor: pointer;
-            font-weight: 300;
-        }
+.nav-list { display: flex; flex-direction: column; gap: .4rem; }
 
-        /* sections = "pages" */
-        .page-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 5rem 0;
-            scroll-margin-top: 80px;
-            border-bottom: 1px solid rgba(90, 110, 74, 0.12);
-        }
-        .section-content {
-            width: 100%;
-        }
+.nav-item {
+  display: flex; align-items: center; gap: 1rem;
+  padding: .85rem 1rem; border-radius: var(--radius-sm);
+  color: var(--text); font-size: 1.05rem; font-weight: 600;
+  letter-spacing: .02em;
+  transition: background .2s, color .2s, transform .2s;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.nav-item .nav-icon {
+  width: 38px; height: 38px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--sage-dim); flex-shrink: 0;
+  transition: background .2s;
+}
+.nav-item:hover {
+  background: var(--terra-dim); color: var(--terra);
+  transform: translateX(4px);
+  border-color: rgba(196,95,44,.18);
+}
+.nav-item:hover .nav-icon { background: var(--terra-dim); }
+.nav-item:focus-visible { outline: 2px solid var(--terra); outline-offset: 2px; }
 
-        /* reveal animation */
-        .reveal-text {
-            opacity: 0;
-            transform: translateY(28px);
-            transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.1), transform 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.1);
-        }
-        .reveal-text.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
+.nav-footer {
+  margin-top: 3rem; padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: .78rem; color: var(--text-muted);
+}
 
-        /* typography */
-        h1 {
-            font-size: 3.2rem;
-            line-height: 1.2;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: var(--text-dark);
-            margin-bottom: 1.5rem;
-        }
-        h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            margin: 1.5rem 0 1rem 0;
-            letter-spacing: -0.01em;
-            color: var(--accent-moss);
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-        }
-        h3 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin: 1rem 0 0.5rem;
-        }
-        .lead {
-            font-size: 1.25rem;
-            color: var(--text-soft);
-            margin-bottom: 2rem;
-            max-width: 720px;
-        }
-        .service-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .card {
-            background: var(--bg-card);
-            border-radius: 32px;
-            padding: 1.8rem;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-            border: 1px solid rgba(90, 110, 74, 0.12);
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-            border-color: rgba(201, 126, 46, 0.3);
-        }
-        .icon-svg {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 1rem;
-            color: var(--accent-amber);
-        }
-        .list-styled {
-            list-style: none;
-            margin: 1rem 0;
-        }
-        .list-styled li {
-            margin-bottom: 0.65rem;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-        .list-styled li::before {
-            content: "•";
-            color: var(--accent-amber);
-            font-weight: bold;
-            position: absolute;
-            left: 0;
-        }
-        /* footer 2026 clean */
-        footer {
-            background: #1E2A1E;
-            color: #D9DBC7;
-            padding: 3rem 0 2rem;
-            margin-top: 2rem;
-        }
-        .footer-inner {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 2rem;
-        }
-        .footer-email {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(255,255,240,0.08);
-            padding: 8px 18px;
-            border-radius: 100px;
-        }
-        .copy-btn {
-            background: var(--accent-amber);
-            border: none;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            color: #1E2A1E;
-        }
-        .copy-btn:hover {
-            background: var(--accent-amber-light);
-        }
-        .toast-msg {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2C4A2E;
-            color: white;
-            padding: 10px 24px;
-            border-radius: 60px;
-            font-size: 0.85rem;
-            z-index: 3000;
-            opacity: 0;
-            transition: 0.2s;
-            pointer-events: none;
-        }
-        .btn-outline {
-            display: inline-block;
-            margin-top: 1.5rem;
-            background: transparent;
-            border: 1px solid var(--accent-moss);
-            padding: 0.7rem 1.6rem;
-            border-radius: 60px;
-            text-decoration: none;
-            color: var(--accent-moss);
-            font-weight: 500;
-            transition: 0.2s;
-        }
-        .btn-outline:hover {
-            background: var(--accent-moss);
-            color: white;
-        }
-        @media (max-width: 780px) {
-            h1 { font-size: 2.2rem; }
-            .container { padding: 0 1.2rem; }
-            .header-inner { padding: 0 1.2rem; }
-            .page-section { padding: 3rem 0; }
-        }
-    </style>
+/* ═══════════════════════════════════════════════════
+   SECTIONS — SHARED
+═══════════════════════════════════════════════════ */
+section {
+  min-height: 100vh;
+  scroll-margin-top: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-inner {
+  max-width: 1080px; margin: 0 auto;
+  padding: 6rem 2rem 5rem;
+  position: relative; z-index: 1;
+}
+
+/* organic background blobs — unique per section */
+.blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); pointer-events: none; z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: .1s; }
+.reveal-delay-2 { transition-delay: .2s; }
+.reveal-delay-3 { transition-delay: .3s; }
+.reveal-delay-4 { transition-delay: .4s; }
+.reveal-delay-5 { transition-delay: .5s; }
+.reveal-delay-6 { transition-delay: .6s; }
+
+/* ═══════════════════════════════════════════════════
+   TYPOGRAPHY COMPONENTS
+═══════════════════════════════════════════════════ */
+.overline {
+  font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--sage-light); font-weight: 700;
+  display: flex; align-items: center; gap: .6rem;
+  margin-bottom: .9rem;
+}
+.overline::before {
+  content: ''; display: block; width: 24px; height: 2px;
+  background: var(--sage-light); border-radius: 2px; flex-shrink: 0;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.18; color: var(--text);
+  margin-bottom: 1.25rem;
+}
+.section-heading em { font-style: normal; color: var(--terra); }
+
+.lead-text {
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  color: var(--text-2); max-width: 600px; line-height: 1.8;
+}
+
+/* ═══════════════════════════════════════════════════
+   CARDS
+═══════════════════════════════════════════════════ */
+.card {
+  background: var(--card); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  padding: 1.75rem;
+  transition: transform .28s var(--ease), box-shadow .28s var(--ease);
+}
+.card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+
+.card-icon {
+  width: 52px; height: 52px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--sage-dim);
+  margin-bottom: 1.1rem;
+  flex-shrink: 0;
+}
+.card-icon.terra { background: var(--terra-dim); }
+
+.card h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem; color: var(--text);
+  margin-bottom: .5rem;
+}
+.card p { font-size: .9rem; color: var(--text-muted); line-height: 1.65; }
+
+/* ═══════════════════════════════════════════════════
+   ① HOME SECTION
+═══════════════════════════════════════════════════ */
+#home {
+  background: var(--bg);
+  display: flex; align-items: center;
+}
+#home .blob:nth-child(1) {
+  width: 500px; height: 500px; top: -120px; right: -100px;
+  background: rgba(196,95,44,.09);
+}
+#home .blob:nth-child(2) {
+  width: 400px; height: 400px; bottom: -80px; left: -80px;
+  background: rgba(90,107,74,.1);
+}
+
+.home-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+  align-items: center;
+}
+@media (max-width: 768px) {
+  .home-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+
+.home-hero-text {}
+.home-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 6.5vw, 4.4rem);
+  line-height: 1.12; color: var(--text);
+  margin-bottom: 1.5rem;
+}
+.home-tagline strong { color: var(--terra); display: block; }
+
+.home-sub {
+  font-size: 1.05rem; color: var(--text-2);
+  max-width: 480px; margin-bottom: 2.2rem;
+  line-height: 1.8;
+}
+
+.btn-terra {
+  display: inline-flex; align-items: center; gap: .55rem;
+  background: var(--terra); color: #fff;
+  padding: .85rem 1.8rem; border-radius: 50px;
+  font-weight: 700; font-size: .92rem; letter-spacing: .04em;
+  box-shadow: 0 4px 18px rgba(196,95,44,.32);
+  transition: background .22s, transform .2s, box-shadow .22s;
+}
+.btn-terra:hover {
+  background: var(--terra-light); transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(196,95,44,.38);
+}
+.btn-terra:focus-visible { outline: 2px solid var(--terra); outline-offset: 3px; border-radius: 50px; }
+
+.btn-sage {
+  display: inline-flex; align-items: center; gap: .55rem;
+  background: transparent; color: var(--sage);
+  padding: .85rem 1.8rem; border-radius: 50px;
+  font-weight: 700; font-size: .92rem; letter-spacing: .04em;
+  border: 2px solid var(--sage); margin-left: .75rem;
+  transition: background .22s, color .22s;
+}
+.btn-sage:hover { background: var(--sage); color: #fff; }
+.btn-sage:focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; border-radius: 50px; }
+
+/* home illustration — SVG organic network */
+.home-visual {
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* service preview pills on home */
+.home-services {
+  margin-top: 3.5rem;
+  display: flex; flex-wrap: wrap; gap: .6rem;
+}
+.service-pill {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 50px; padding: .45rem .9rem;
+  font-size: .8rem; font-weight: 600; color: var(--text-2);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: border-color .2s, color .2s, background .2s, transform .18s;
+}
+.service-pill:hover { border-color: var(--terra); color: var(--terra); transform: translateY(-2px); }
+.service-pill svg { flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════════════
+   ② EMERGENCY SECTION
+═══════════════════════════════════════════════════ */
+#emergency {
+  background: var(--bg-warm);
+}
+#emergency .blob:nth-child(1) {
+  width: 380px; height: 380px; top: -60px; left: 60%;
+  background: rgba(196,95,44,.08);
+}
+
+/* ═══════════════════════════════════════════════════
+   ③ LEGAL SECTION
+═══════════════════════════════════════════════════ */
+#legal {
+  background: var(--bg);
+}
+#legal .blob:nth-child(1) {
+  width: 350px; height: 350px; bottom: 0; right: -80px;
+  background: rgba(90,107,74,.09);
+}
+
+/* ═══════════════════════════════════════════════════
+   ④ RAPID RESPONSE
+═══════════════════════════════════════════════════ */
+#rapid {
+  background: var(--bg-section);
+}
+#rapid .blob:nth-child(1) {
+  width: 420px; height: 420px; top: 20%; left: -100px;
+  background: rgba(196,95,44,.07);
+}
+
+/* ═══════════════════════════════════════════════════
+   ⑤ MENTAL HEALTH
+═══════════════════════════════════════════════════ */
+#mental {
+  background: var(--bg-warm);
+}
+#mental .blob:nth-child(1) {
+  width: 360px; height: 360px; top: -40px; right: 5%;
+  background: rgba(90,107,74,.1);
+}
+
+/* ═══════════════════════════════════════════════════
+   ⑥ ADVOCACY
+═══════════════════════════════════════════════════ */
+#advocacy {
+  background: var(--bg);
+}
+#advocacy .blob:nth-child(1) {
+  width: 400px; height: 400px; bottom: 5%; left: 50%;
+  background: rgba(196,95,44,.07);
+}
+
+/* ═══════════════════════════════════════════════════
+   SECTION LAYOUT — SERVICE
+═══════════════════════════════════════════════════ */
+.service-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+  align-items: start;
+}
+.service-layout.flip { direction: rtl; }
+.service-layout.flip > * { direction: ltr; }
+@media (max-width: 860px) {
+  .service-layout, .service-layout.flip {
+    grid-template-columns: 1fr; direction: ltr; gap: 2.5rem;
+  }
+}
+
+.service-header-icon {
+  width: 72px; height: 72px; border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--terra-dim);
+  margin-bottom: 1.5rem;
+}
+.service-header-icon.sage { background: var(--sage-dim); }
+
+.service-bullets {
+  margin-top: 2rem; display: flex; flex-direction: column; gap: .7rem;
+}
+.service-bullet {
+  display: flex; align-items: flex-start; gap: .8rem;
+  font-size: .92rem; color: var(--text-2); line-height: 1.6;
+}
+.bullet-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--terra); flex-shrink: 0; margin-top: .45rem;
+}
+.bullet-dot.sage { background: var(--sage); }
+
+/* service cards grid (right column) */
+.cards-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+}
+@media (max-width: 540px) {
+  .cards-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════
+   DIVIDER
+═══════════════════════════════════════════════════ */
+.section-divider {
+  max-width: 1080px; margin: 0 auto 0;
+  height: 1px; background: var(--border);
+}
+
+/* ═══════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════ */
+.toast {
+  position: fixed; bottom: 2rem; left: 50%; z-index: 9999;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--sage); color: #fff;
+  padding: .6rem 1.5rem; border-radius: 50px;
+  font-size: .85rem; font-weight: 700;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s, transform .3s;
+  box-shadow: 0 4px 20px rgba(90,107,74,.38);
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+footer {
+  background: var(--text);
+  color: rgba(253,251,247,.7);
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+.footer-inner {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: space-between; gap: 1rem;
+}
+.footer-copy { font-size: .82rem; }
+.footer-email {
+  display: inline-flex; align-items: center; gap: .55rem;
+  background: rgba(253,251,247,.08); border: 1px solid rgba(253,251,247,.18);
+  border-radius: 50px; padding: .5rem 1.1rem;
+  font-size: .85rem; color: rgba(253,251,247,.85);
+  cursor: pointer;
+  transition: background .22s, border-color .22s;
+}
+.footer-email:hover { background: rgba(253,251,247,.15); border-color: rgba(253,251,247,.4); }
+.footer-email:focus-visible { outline: 2px solid var(--terra-light); outline-offset: 3px; border-radius: 50px; }
+.footer-email span { color: #fff; font-weight: 600; }
+
+/* ═══════════════════════════════════════════════════
+   NETWORK SVG (home visual)
+═══════════════════════════════════════════════════ */
+.home-svg-wrap {
+  width: 100%; max-width: 420px; margin: 0 auto;
+  position: relative;
+}
+.home-svg-wrap svg {
+  width: 100%; height: auto;
+  overflow: visible;
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE MISC
+═══════════════════════════════════════════════════ */
+@media (max-width: 540px) {
+  .section-inner { padding: 5rem 1.25rem 4rem; }
+  .nav-overlay { padding: 3.5rem 1.75rem; }
+  .home-tagline { font-size: 2.4rem; }
+}
+
+/* Page-turn visual accent */
+.page-accent {
+  display: inline-block;
+  width: 40px; height: 3px; border-radius: 3px;
+  background: linear-gradient(90deg, var(--terra), var(--sage));
+  margin-bottom: 2rem;
+}
+</style>
 </head>
 <body>
 
-<header>
-    <div class="header-inner">
-        <a href="#" class="logo">SEMENA CENTER</a>
-        <button class="nav-dots" id="hamburgerDots" aria-label="menu">
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-        </button>
+<!-- SKIP LINK -->
+<a href="#home" class="skip-link">Skip to main content</a>
+
+<!-- TOAST -->
+<div class="toast" id="toast" role="status" aria-live="polite">Email copied!</div>
+
+<!-- ═══════════════════════════════════════════════════
+     3-DOT MENU TRIGGER
+═══════════════════════════════════════════════════ -->
+<button
+  class="menu-trigger"
+  id="menu-trigger"
+  aria-label="Open navigation menu"
+  aria-expanded="false"
+  aria-controls="nav-overlay"
+>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+</button>
+
+<!-- ═══════════════════════════════════════════════════
+     NAV OVERLAY BACKDROP
+═══════════════════════════════════════════════════ -->
+<div class="nav-overlay-backdrop" id="nav-backdrop" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     NAV OVERLAY
+═══════════════════════════════════════════════════ -->
+<nav class="nav-overlay" id="nav-overlay" aria-label="Site navigation" role="navigation">
+  <div class="nav-brand">
+    <!-- mini seed icon -->
+    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+      <circle cx="17" cy="17" r="16" stroke="#5A6B4A" stroke-width="1.4" stroke-dasharray="3 3"/>
+      <circle cx="17" cy="17" r="5.5" fill="#C45F2C"/>
+      <line x1="17" y1="22.5" x2="17" y2="31" stroke="#5A6B4A" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="17" y1="27" x2="13.5" y2="31" stroke="#5A6B4A" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="17" y1="27" x2="20.5" y2="31" stroke="#5A6B4A" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="17" y1="11.5" x2="17" y2="5" stroke="#C45F2C" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M17 8 Q13.5 5.5 12.5 3" stroke="#C45F2C" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <path d="M17 7.5 Q20.5 5 20.5 2.5" stroke="#C45F2C" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div>
+      Semena Center
+      <span>semenacenter.org</span>
     </div>
-</header>
+  </div>
 
-<!-- Overlay menu (navigation to pages / sections) -->
-<div class="menu-overlay" id="menuOverlay">
-    <button class="close-menu" id="closeMenuBtn">&times;</button>
-    <div class="menu-links">
-        <a href="#home" class="nav-link">Home</a>
-        <a href="#emergency" class="nav-link">Emergency & Relocation</a>
-        <a href="#legal" class="nav-link">Legal Aid</a>
-        <a href="#rapid" class="nav-link">Rapid Response</a>
-        <a href="#mental" class="nav-link">Mental Health</a>
-        <a href="#advocacy" class="nav-link">Advocacy & Solidarity</a>
+  <ul class="nav-list" role="list">
+    <li>
+      <button class="nav-item" onclick="navTo('home')" aria-label="Home section">
+        <div class="nav-icon">
+          <!-- shield + seed -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M11 2L3 6v6c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V6L11 2z" stroke="#5A6B4A" stroke-width="1.6" fill="none" stroke-linejoin="round"/>
+            <circle cx="11" cy="11" r="2.5" fill="#C45F2C"/>
+            <line x1="11" y1="13.5" x2="11" y2="17" stroke="#5A6B4A" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        Home
+      </button>
+    </li>
+    <li>
+      <button class="nav-item" onclick="navTo('emergency')" aria-label="Emergency Protection section">
+        <div class="nav-icon">
+          <!-- house + arrow -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M2 11L11 3l9 8" stroke="#5A6B4A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 9.5V19h5v-4h4v4h5V9.5" stroke="#5A6B4A" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+            <path d="M15 14l2.5 2.5M15 16.5l2.5-2.5" stroke="#C45F2C" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        Emergency Protection
+      </button>
+    </li>
+    <li>
+      <button class="nav-item" onclick="navTo('legal')" aria-label="Legal Aid section">
+        <div class="nav-icon">
+          <!-- gavel + feather -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M5 17l8-8" stroke="#5A6B4A" stroke-width="1.5" stroke-linecap="round"/>
+            <rect x="10" y="4" width="7" height="4" rx="1.5" transform="rotate(45 10 4)" stroke="#5A6B4A" stroke-width="1.4" fill="none"/>
+            <path d="M14 15c2-1 4-1 5 .5" stroke="#C45F2C" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+            <path d="M14 17c1-2 2-4 5-5" stroke="#C45F2C" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        Legal Aid
+      </button>
+    </li>
+    <li>
+      <button class="nav-item" onclick="navTo('rapid')" aria-label="Rapid Response section">
+        <div class="nav-icon">
+          <!-- lightning + hand -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M13 2L7 12h5l-3 8L19 10h-6l3-8z" stroke="#C45F2C" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+            <path d="M3 15c0-2 1.5-3.5 3.5-3.5" stroke="#5A6B4A" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        Rapid Response
+      </button>
+    </li>
+    <li>
+      <button class="nav-item" onclick="navTo('mental')" aria-label="Mental Health section">
+        <div class="nav-icon">
+          <!-- heart + waves -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M11 18s-8-5.5-8-10a5 5 0 0 1 8-4A5 5 0 0 1 19 8c0 4.5-8 10-8 10z" stroke="#5A6B4A" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+            <path d="M7 11h2l1.5-3 2 5 1.5-3.5 1 1.5h1" stroke="#C45F2C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        Mental Health
+      </button>
+    </li>
+    <li>
+      <button class="nav-item" onclick="navTo('advocacy')" aria-label="Advocacy and Solidarity section">
+        <div class="nav-icon">
+          <!-- bridge / amplifier -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M2 16c2-4 5-6 9-6s7 2 9 6" stroke="#5A6B4A" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <line x1="2" y1="16" x2="2" y2="19" stroke="#5A6B4A" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="20" y1="16" x2="20" y2="19" stroke="#5A6B4A" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="11" y1="10" x2="11" y2="6" stroke="#C45F2C" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M8.5 7.5 Q11 4 13.5 7.5" stroke="#C45F2C" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        Advocacy &amp; Solidarity
+      </button>
+    </li>
+  </ul>
+
+  <div class="nav-footer">
+    <button class="footer-email" onclick="copyEmail(); closeMenu();" style="background:rgba(31,42,31,.06);border-color:var(--border);">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <rect x="1" y="3" width="12" height="9" rx="2" stroke="#5A6B4A" stroke-width="1.3"/>
+        <path d="M1 5.5l6 4 6-4" stroke="#C45F2C" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <span style="color:var(--text);">info@semenacenter.org</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     ① HOME
+═══════════════════════════════════════════════════ -->
+<section id="home" aria-labelledby="home-heading">
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <div class="section-inner">
+    <div class="home-layout">
+      <div class="home-hero-text">
+        <div class="overline reveal">Semena Center</div>
+        <h1 class="home-tagline reveal reveal-delay-1" id="home-heading">
+          You defend<br>human rights.
+          <strong>We defend you.</strong>
+        </h1>
+        <p class="home-sub reveal reveal-delay-2">
+          We are Semena Center — a protection hub for human rights defenders facing threats,
+          unlawful arrests, violence, and persecution. Emergency relocation, legal aid, rapid
+          response, mental health, and advocacy: built around the real, urgent needs of those
+          who risk everything for justice.
+        </p>
+        <div class="reveal reveal-delay-3">
+          <button class="btn-terra" onclick="navTo('emergency')">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 2v9M5 8l3 3 3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 13h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            Request Emergency Help
+          </button>
+          <button class="btn-sage" onclick="navTo('advocacy')">Our Work</button>
+        </div>
+
+        <div class="home-services reveal reveal-delay-4" role="list" aria-label="Our services">
+          <button class="service-pill" onclick="navTo('emergency')" role="listitem">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5" stroke="#C45F2C" stroke-width="1.3"/><path d="M6 3.5v3l2 1.5" stroke="#C45F2C" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Emergency
+          </button>
+          <button class="service-pill" onclick="navTo('legal')" role="listitem">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10l4-4M4 3l5 5" stroke="#5A6B4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Legal Aid
+          </button>
+          <button class="service-pill" onclick="navTo('rapid')" role="listitem">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M7 1L3 7h4l-2 4L11 5H7l2-4z" stroke="#C45F2C" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg>
+            Rapid Response
+          </button>
+          <button class="service-pill" onclick="navTo('mental')" role="listitem">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 10S1 6.5 1 4a3.5 3.5 0 0 1 5-3.2A3.5 3.5 0 0 1 11 4c0 2.5-5 6-5 6z" stroke="#5A6B4A" stroke-width="1.2" fill="none"/></svg>
+            Mental Health
+          </button>
+          <button class="service-pill" onclick="navTo('advocacy')" role="listitem">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M1 9c1.2-2.5 3-4 5-4s3.8 1.5 5 4" stroke="#5A6B4A" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>
+            Advocacy
+          </button>
+        </div>
+      </div>
+
+      <!-- HOME VISUAL — organic network SVG -->
+      <div class="home-visual reveal reveal-delay-2">
+        <div class="home-svg-wrap" aria-hidden="true">
+          <svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- background circle -->
+            <circle cx="210" cy="210" r="200" fill="rgba(90,107,74,0.05)" stroke="rgba(90,107,74,0.14)" stroke-width="1.5" stroke-dasharray="6 5"/>
+            <circle cx="210" cy="210" r="140" fill="rgba(196,95,44,0.04)" stroke="rgba(196,95,44,0.1)" stroke-width="1" stroke-dasharray="4 6"/>
+
+            <!-- edge lines -->
+            <line x1="210" y1="210" x2="118" y2="120" stroke="rgba(90,107,74,0.3)" stroke-width="1.2"/>
+            <line x1="210" y1="210" x2="305" y2="130" stroke="rgba(90,107,74,0.3)" stroke-width="1.2"/>
+            <line x1="210" y1="210" x2="330" y2="260" stroke="rgba(196,95,44,0.28)" stroke-width="1.2"/>
+            <line x1="210" y1="210" x2="200" y2="330" stroke="rgba(90,107,74,0.25)" stroke-width="1.2"/>
+            <line x1="210" y1="210" x2="95" y2="280" stroke="rgba(196,95,44,0.22)" stroke-width="1.2"/>
+            <line x1="210" y1="210" x2="160" y2="80" stroke="rgba(90,107,74,0.2)" stroke-width="1.1"/>
+            <line x1="118" y1="120" x2="305" y2="130" stroke="rgba(90,107,74,0.15)" stroke-width="1"/>
+            <line x1="305" y1="130" x2="330" y2="260" stroke="rgba(196,95,44,0.18)" stroke-width="1"/>
+            <line x1="330" y1="260" x2="200" y2="330" stroke="rgba(90,107,74,0.15)" stroke-width="1"/>
+            <line x1="200" y1="330" x2="95" y2="280" stroke="rgba(196,95,44,0.15)" stroke-width="1"/>
+            <line x1="95" y1="280" x2="118" y2="120" stroke="rgba(90,107,74,0.12)" stroke-width="1"/>
+            <!-- extra branches -->
+            <line x1="118" y1="120" x2="68" y2="158" stroke="rgba(90,107,74,0.18)" stroke-width="1"/>
+            <line x1="305" y1="130" x2="355" y2="90" stroke="rgba(196,95,44,0.15)" stroke-width="1"/>
+            <line x1="330" y1="260" x2="375" y2="300" stroke="rgba(90,107,74,0.12)" stroke-width="1"/>
+            <line x1="95" y1="280" x2="55" y2="320" stroke="rgba(196,95,44,0.12)" stroke-width="1"/>
+            <line x1="200" y1="330" x2="210" y2="380" stroke="rgba(90,107,74,0.15)" stroke-width="1"/>
+            <line x1="160" y1="80" x2="118" y2="120" stroke="rgba(90,107,74,0.15)" stroke-width="1"/>
+            <line x1="160" y1="80" x2="305" y2="130" stroke="rgba(196,95,44,0.1)" stroke-width="1"/>
+
+            <!-- leaf nodes -->
+            <circle cx="68" cy="158" r="5" fill="rgba(90,107,74,0.5)"/>
+            <circle cx="355" cy="90" r="5" fill="rgba(196,95,44,0.5)"/>
+            <circle cx="375" cy="300" r="5" fill="rgba(90,107,74,0.5)"/>
+            <circle cx="55" cy="320" r="5" fill="rgba(196,95,44,0.4)"/>
+            <circle cx="210" cy="380" r="5" fill="rgba(90,107,74,0.4)"/>
+
+            <!-- main nodes -->
+            <circle cx="118" cy="120" r="11" fill="rgba(90,107,74,0.18)" stroke="#5A6B4A" stroke-width="1.6"/>
+            <circle cx="305" cy="130" r="11" fill="rgba(196,95,44,0.18)" stroke="#C45F2C" stroke-width="1.6"/>
+            <circle cx="330" cy="260" r="11" fill="rgba(90,107,74,0.18)" stroke="#5A6B4A" stroke-width="1.6"/>
+            <circle cx="200" cy="330" r="11" fill="rgba(196,95,44,0.18)" stroke="#C45F2C" stroke-width="1.6"/>
+            <circle cx="95" cy="280" r="11" fill="rgba(90,107,74,0.18)" stroke="#5A6B4A" stroke-width="1.6"/>
+            <circle cx="160" cy="80" r="8" fill="rgba(196,95,44,0.15)" stroke="#C45F2C" stroke-width="1.4"/>
+
+            <!-- center — seed -->
+            <circle cx="210" cy="210" r="28" fill="rgba(196,95,44,0.12)" stroke="#C45F2C" stroke-width="1.8"/>
+            <circle cx="210" cy="210" r="14" fill="#C45F2C"/>
+            <!-- sprout -->
+            <line x1="210" y1="196" x2="210" y2="186" stroke="#FDFBF7" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M210 190 Q207 187 205 184" stroke="#FDFBF7" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            <path d="M210 190 Q213 187 215 184" stroke="#FDFBF7" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+
+            <!-- pulse rings (animated) -->
+            <circle cx="210" cy="210" r="38" stroke="#C45F2C" stroke-width="1" opacity="0.4">
+              <animate attributeName="r" values="28;60;28" dur="3.5s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.4;0;0.4" dur="3.5s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+</section>
 
-<main>
-    <!-- Home section -->
-    <section id="home" class="page-section">
-        <div class="container section-content">
-            <div class="reveal-text">
-                <!-- SVG icon: shield-seed -->
-                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L3 6V12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12V6L12 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                    <path d="M12 6V12L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>
-                    <path d="M8 10L12 12L16 10" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                </svg>
-                <h1>You defend human rights.<br>We defend you.</h1>
-                <p class="lead">Semena Center provides immediate, discreet protection for activists, journalists, and defenders facing threats, persecution, or violence. Emergency relocation, legal aid, rapid intervention, and holistic support — without compromise.</p>
-                <a href="#emergency" class="btn-outline">→ Explore our protection</a>
+<!-- ═══════════════════════════════════════════════════
+     ② EMERGENCY PROTECTION
+═══════════════════════════════════════════════════ -->
+<section id="emergency" aria-labelledby="emergency-heading">
+  <div class="blob"></div>
+  <div class="section-inner">
+    <div class="service-layout">
+      <!-- Left: text -->
+      <div>
+        <div class="page-accent reveal"></div>
+        <div class="overline reveal reveal-delay-1">Emergency Support</div>
+        <div class="service-header-icon reveal reveal-delay-1" aria-hidden="true">
+          <!-- house + arrow/eye -->
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path d="M4 20L20 6l16 14" stroke="#C45F2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 17.5V34h9v-7h8v7h9V17.5" stroke="#C45F2C" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
+            <path d="M25 26c3.5 0 6.5 2 6.5 2S28.5 30 25 30s-6.5-2-6.5-2 3-2 6.5-2z" stroke="#5A6B4A" stroke-width="1.4" fill="none"/>
+            <circle cx="25" cy="28" r="1.8" fill="#5A6B4A"/>
+          </svg>
+        </div>
+        <h2 class="section-heading reveal reveal-delay-2" id="emergency-heading">
+          Emergency Protection<br>&amp; <em>Relocation Support</em>
+        </h2>
+        <p class="lead-text reveal reveal-delay-3">
+          When your safety is under threat, every hour matters. We provide immediate protection,
+          safe shelter, and coordinated relocation for human rights defenders facing violence,
+          arbitrary arrest, or persecution — ensuring you can continue your work without fear.
+        </p>
+        <ul class="service-bullets reveal reveal-delay-4" aria-label="Emergency services provided">
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Safe shelter and temporary accommodation</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Emergency transportation and evacuation</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Coordination with trusted partner networks</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Food, medical care, and psychosocial support</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Reintegration support after crisis situations</li>
+        </ul>
+        <div class="reveal reveal-delay-5" style="margin-top:2rem;">
+          <button class="btn-terra" onclick="copyEmail()">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><rect x="1" y="3" width="13" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M1 6l6.5 4.5L14 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Request Assistance
+          </button>
+        </div>
+      </div>
+      <!-- Right: cards -->
+      <div>
+        <div class="cards-grid">
+          <div class="card reveal reveal-delay-2">
+            <div class="card-icon terra" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 3L4 10v14h7v-6h6v6h7V10L14 3z" stroke="#C45F2C" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
             </div>
-        </div>
-    </section>
-
-    <!-- Emergency Protection (Relocation) -->
-    <section id="emergency" class="page-section">
-        <div class="container section-content">
-            <div class="reveal-text">
-                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 9L12 3L21 9L12 15L3 9Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                    <path d="M5 11V16L12 21L19 16V11" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                    <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-                    <path d="M8 7L12 5L16 7" stroke="currentColor" stroke-width="1.2"/>
-                </svg>
-                <h2>Emergency Protection & Relocation Support</h2>
-                <p>For defenders at immediate risk — safe shelter, emergency transport, and reintegration.</p>
-                <div class="service-grid">
-                    <div class="card"><h3>🏠 Safe Shelter</h3><p>Temporary accommodation in secure, undisclosed locations.</p></div>
-                    <div class="card"><h3>🚑 Evacuation & Transportation</h3><p>Emergency transportation and coordination with protection networks.</p></div>
-                    <div class="card"><h3>🍲 Basic Necessities + Medical</h3><p>Food, healthcare, and psychosocial first aid.</p></div>
-                    <div class="card"><h3>🔄 Reintegration Support</h3><p>Recovery and safe continuation of advocacy work.</p></div>
-                </div>
-                <p class="list-styled" style="margin-top:1rem"><strong>We coordinate with local and international partners for timely protection.</strong></p>
+            <h3>Safe Shelter</h3>
+            <p>Secure, confidential accommodation for defenders and their families in crisis.</p>
+          </div>
+          <div class="card reveal reveal-delay-3">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#5A6B4A" stroke-width="1.5"/><path d="M14 9v5l4 2" stroke="#5A6B4A" stroke-width="1.5" stroke-linecap="round"/></svg>
             </div>
-        </div>
-    </section>
-
-    <!-- Legal Aid -->
-    <section id="legal" class="page-section">
-        <div class="container section-content">
-            <div class="reveal-text">
-                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L15 8H22L16 12L19 18L12 14.5L5 18L8 12L2 8H9L12 2Z" stroke="currentColor" stroke-width="1.4" fill="none"/>
-                    <path d="M12 6L13 9H16L14 11L15 14L12 12.5L9 14L10 11L8 9H11L12 6Z" fill="currentColor" opacity="0.8"/>
-                </svg>
-                <h2>Legal Aid & Court Support</h2>
-                <p>Legal counseling, representation, bail support, and documentation of violations.</p>
-                <ul class="list-styled">
-                    <li>Legal counseling and referrals</li>
-                    <li>Court representation & bail/bond support</li>
-                    <li>Monitoring unlawful detention & fair trial advocacy</li>
-                    <li>Documentation of abuses and complaints before authorities</li>
-                </ul>
-                <p><em>We oppose arbitrary arrests, torture, and abuse of power.</em></p>
+            <h3>Rapid Evacuation</h3>
+            <p>Emergency transport and coordinated extraction from high-risk situations.</p>
+          </div>
+          <div class="card reveal reveal-delay-4">
+            <div class="card-icon terra" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4C9 4 5 8 5 13c0 7 9 14 9 14s9-7 9-14c0-5-4-9-9-9z" stroke="#C45F2C" stroke-width="1.5" fill="none"/><circle cx="14" cy="13" r="3" fill="#C45F2C"/></svg>
             </div>
-        </div>
-    </section>
-
-    <!-- Rapid Response -->
-    <section id="rapid" class="page-section">
-        <div class="container section-content">
-            <div class="reveal-text">
-                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13 2L3 7V12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12V7L13 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                    <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="1.5"/>
-                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
-                </svg>
-                <h2>Rapid Response & Crisis Intervention</h2>
-                <p>Real-time support during threats, arrests, or attacks. Our network mobilizes immediately.</p>
-                <div style="background: #F5EDE2; border-radius: 24px; padding: 1.5rem; margin: 1rem 0;">
-                    <p style="font-weight: 600;">⚡ 24/7 incident verification • emergency referrals • rescue coordination • crisis counseling</p>
-                </div>
-                <ul class="list-styled">
-                    <li>Monitor & verify abuses</li>
-                    <li>Engage stakeholders & authorities when needed</li>
-                    <li>Emotional first aid</li>
-                </ul>
+            <h3>Network Partners</h3>
+            <p>Coordination with trusted local and international protection organizations.</p>
+          </div>
+          <div class="card reveal reveal-delay-5">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 5v10M10 9l4-4 4 4" stroke="#5A6B4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 21h18" stroke="#5A6B4A" stroke-width="1.5" stroke-linecap="round"/><path d="M8 17v4M14 17v4M20 17v4" stroke="#5A6B4A" stroke-width="1.3" stroke-linecap="round"/></svg>
             </div>
+            <h3>Reintegration</h3>
+            <p>Ongoing recovery and resettlement support after the immediate crisis has passed.</p>
+          </div>
         </div>
-    </section>
-
-    <!-- Mental Health -->
-    <section id="mental" class="page-section">
-        <div class="container section-content">
-            <div class="reveal-text">
-                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="1.4" fill="none"/>
-                    <path d="M8 14C9.5 16 14.5 16 16 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    <circle cx="9" cy="10" r="1" fill="currentColor"/>
-                    <circle cx="15" cy="10" r="1" fill="currentColor"/>
-                </svg>
-                <h2>Mental Health & Psychosocial Support</h2>
-                <p>Trauma-informed care, peer spaces, and emotional resilience for defenders.</p>
-                <div class="service-grid">
-                    <div class="card"><h3>🧠 Trauma-informed counseling</h3><p>Referrals and confidential support networks.</p></div>
-                    <div class="card"><h3>🤝 Peer Healing Spaces</h3><p>Group solidarity & wellness circles.</p></div>
-                    <div class="card"><h3>🌿 Burnout Prevention</h3><p>Mental wellness awareness and recovery assistance.</p></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Advocacy & Solidarity -->
-    <section id="advocacy" class="page-section">
-        <div class="container section-content">
-            <div class="reveal-text">
-                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                    <path d="M5 3L19 3" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M5 21L19 21" stroke="currentColor" stroke-width="1.5"/>
-                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.4" fill="none"/>
-                </svg>
-                <h2>Advocacy & Solidarity Networks</h2>
-                <p>We amplify defenders' voices, advocate for legal protections, and build global solidarity.</p>
-                <ul class="list-styled">
-                    <li>Campaigns against criminalization of activism</li>
-                    <li>International accountability for perpetrators</li>
-                    <li>Strengthening civic space & free assembly</li>
-                    <li>Partnerships with regional protection networks</li>
-                </ul>
-                <div style="margin-top: 2rem; background: #E9E3D4; border-radius: 28px; padding: 1rem 1.5rem;">
-                    <p style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;"><span>✊🏽 “Solidarity is our shield — together we build safe environments for defenders.”</span></p>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
-
-<footer>
-    <div class="footer-inner">
-        <div>© 2026 Semena Center — protection for the protectors</div>
-        <div class="footer-email">
-            <span>📧 info@semenacenter.org</span>
-            <button class="copy-btn" id="copyEmailBtn">Copy email</button>
-        </div>
-        <div style="font-size: 0.85rem;">✦ discreet | resilient | unwavering</div>
+      </div>
     </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     ③ LEGAL AID
+═══════════════════════════════════════════════════ -->
+<section id="legal" aria-labelledby="legal-heading">
+  <div class="blob"></div>
+  <div class="section-inner">
+    <div class="service-layout flip">
+      <!-- Left (displayed right due to flip): cards -->
+      <div>
+        <div class="cards-grid">
+          <div class="card reveal reveal-delay-2">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="8" r="4" stroke="#5A6B4A" stroke-width="1.5"/><path d="M6 22c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="#5A6B4A" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+            </div>
+            <h3>Legal Counseling</h3>
+            <p>Expert guidance on your rights, options, and legal exposure in complex situations.</p>
+          </div>
+          <div class="card reveal reveal-delay-3">
+            <div class="card-icon terra" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="7" y="4" width="14" height="20" rx="2" stroke="#C45F2C" stroke-width="1.5"/><line x1="10" y1="10" x2="18" y2="10" stroke="#C45F2C" stroke-width="1.3" stroke-linecap="round"/><line x1="10" y1="14" x2="18" y2="14" stroke="#C45F2C" stroke-width="1.3" stroke-linecap="round"/><line x1="10" y1="18" x2="14" y2="18" stroke="#C45F2C" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Documentation</h3>
+            <p>Thorough recording of human rights violations for legal proceedings and advocacy.</p>
+          </div>
+          <div class="card reveal reveal-delay-4">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M8 14l4 4 8-8" stroke="#5A6B4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="14" cy="14" r="11" stroke="#5A6B4A" stroke-width="1.4"/></svg>
+            </div>
+            <h3>Bail Support</h3>
+            <p>Assistance securing release for unlawfully arrested activists and defenders.</p>
+          </div>
+          <div class="card reveal reveal-delay-5">
+            <div class="card-icon terra" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><line x1="14" y1="6" x2="14" y2="22" stroke="#C45F2C" stroke-width="1.6" stroke-linecap="round"/><line x1="7" y1="9" x2="21" y2="9" stroke="#C45F2C" stroke-width="1.4" stroke-linecap="round"/><path d="M7 9l-3 7h6l-3-7z" fill="#C45F2C" opacity=".6"/><path d="M21 9l-3 7h6l-3-7z" fill="#5A6B4A" opacity=".7"/><line x1="10" y1="22" x2="18" y2="22" stroke="#C45F2C" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Fair Trial Advocacy</h3>
+            <p>Monitoring court proceedings and advocating for due process and justice.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Right (displayed left): text -->
+      <div>
+        <div class="page-accent reveal"></div>
+        <div class="overline reveal reveal-delay-1">Legal Aid &amp; Court Support</div>
+        <div class="service-header-icon sage reveal reveal-delay-1" aria-hidden="true">
+          <!-- gavel + feather -->
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path d="M6 34l14-14" stroke="#5A6B4A" stroke-width="2" stroke-linecap="round"/>
+            <rect x="17" y="7" width="12" height="6" rx="2.5" transform="rotate(45 17 7)" stroke="#5A6B4A" stroke-width="1.8" fill="none"/>
+            <path d="M26 26c3.5-1.5 7-1 9 1.5" stroke="#C45F2C" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <path d="M26 29c1.5-3 3.5-6 9-8" stroke="#C45F2C" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+            <path d="M26 32c0-5 1-8 9-11" stroke="#C45F2C" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <h2 class="section-heading reveal reveal-delay-2" id="legal-heading">
+          Legal Aid &amp;<br><em>Court Support</em>
+        </h2>
+        <p class="lead-text reveal reveal-delay-3">
+          We believe access to justice is non-negotiable. Our legal support connects defenders
+          with experienced lawyers, legal aid providers, and human rights institutions — ensuring
+          no one faces the courtroom alone when their freedom is on the line.
+        </p>
+        <ul class="service-bullets reveal reveal-delay-4" aria-label="Legal services provided">
+          <li class="service-bullet"><span class="bullet-dot sage" aria-hidden="true"></span>Legal counseling and referrals</li>
+          <li class="service-bullet"><span class="bullet-dot sage" aria-hidden="true"></span>Court representation and bail support</li>
+          <li class="service-bullet"><span class="bullet-dot sage" aria-hidden="true"></span>Monitoring unlawful detention</li>
+          <li class="service-bullet"><span class="bullet-dot sage" aria-hidden="true"></span>Human rights violation documentation</li>
+          <li class="service-bullet"><span class="bullet-dot sage" aria-hidden="true"></span>Filing complaints before relevant authorities</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     ④ RAPID RESPONSE
+═══════════════════════════════════════════════════ -->
+<section id="rapid" aria-labelledby="rapid-heading">
+  <div class="blob"></div>
+  <div class="section-inner">
+    <div class="service-layout">
+      <div>
+        <div class="page-accent reveal"></div>
+        <div class="overline reveal reveal-delay-1">Crisis Intervention</div>
+        <div class="service-header-icon reveal reveal-delay-1" aria-hidden="true">
+          <!-- lightning + hand -->
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path d="M23 4L11 21h10l-5 15L32 17H22l5-13z" stroke="#C45F2C" stroke-width="1.9" stroke-linejoin="round" fill="none"/>
+            <path d="M5 28c0-3.5 2.5-6 6-6" stroke="#5A6B4A" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            <circle cx="5" cy="30" r="2.2" fill="#5A6B4A"/>
+          </svg>
+        </div>
+        <h2 class="section-heading reveal reveal-delay-2" id="rapid-heading">
+          Rapid Response &amp;<br><em>Crisis Intervention</em>
+        </h2>
+        <p class="lead-text reveal reveal-delay-3">
+          Threats don't wait for office hours. Our 24/7 rapid response system is built to verify
+          incidents, mobilize support, and coordinate protective interventions for defenders
+          facing immediate danger — within hours, not days.
+        </p>
+        <ul class="service-bullets reveal reveal-delay-4" aria-label="Rapid response services">
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>24/7 incident monitoring and verification</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Emergency support and referral mobilization</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Rescue and protection coordination</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Engagement with authorities when necessary</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Crisis counseling and emotional support</li>
+        </ul>
+        <div class="reveal reveal-delay-5" style="margin-top:2rem;">
+          <button class="btn-terra" onclick="copyEmail()">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2 7.5h11M9 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Report an Incident
+          </button>
+        </div>
+      </div>
+      <!-- Response mechanism visual -->
+      <div class="reveal reveal-delay-3" style="display:flex;align-items:center;justify-content:center;">
+        <div style="max-width:360px;width:100%;" aria-hidden="true">
+          <svg viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+            <!-- outer ring -->
+            <circle cx="180" cy="180" r="160" stroke="rgba(196,95,44,0.12)" stroke-width="1.5" stroke-dasharray="8 6"/>
+            <!-- inner ring -->
+            <circle cx="180" cy="180" r="100" stroke="rgba(90,107,74,0.15)" stroke-width="1.2" stroke-dasharray="4 5"/>
+            <!-- spokes -->
+            <line x1="180" y1="180" x2="80" y2="80" stroke="rgba(196,95,44,0.25)" stroke-width="1.3"/>
+            <line x1="180" y1="180" x2="280" y2="80" stroke="rgba(90,107,74,0.25)" stroke-width="1.3"/>
+            <line x1="180" y1="180" x2="310" y2="220" stroke="rgba(196,95,44,0.2)" stroke-width="1.3"/>
+            <line x1="180" y1="180" x2="180" y2="330" stroke="rgba(90,107,74,0.2)" stroke-width="1.3"/>
+            <line x1="180" y1="180" x2="55" y2="240" stroke="rgba(196,95,44,0.2)" stroke-width="1.3"/>
+            <!-- outer nodes -->
+            <circle cx="80" cy="80" r="14" fill="rgba(196,95,44,0.15)" stroke="#C45F2C" stroke-width="1.5"/>
+            <text x="80" y="84" text-anchor="middle" fill="#C45F2C" font-size="9" font-family="Trebuchet MS,sans-serif">ALERT</text>
+            <circle cx="280" cy="80" r="14" fill="rgba(90,107,74,0.15)" stroke="#5A6B4A" stroke-width="1.5"/>
+            <text x="280" y="84" text-anchor="middle" fill="#5A6B4A" font-size="8" font-family="Trebuchet MS,sans-serif">VERIFY</text>
+            <circle cx="310" cy="220" r="14" fill="rgba(196,95,44,0.15)" stroke="#C45F2C" stroke-width="1.5"/>
+            <text x="310" y="224" text-anchor="middle" fill="#C45F2C" font-size="8" font-family="Trebuchet MS,sans-serif">MOBILIZE</text>
+            <circle cx="180" cy="330" r="14" fill="rgba(90,107,74,0.15)" stroke="#5A6B4A" stroke-width="1.5"/>
+            <text x="180" y="334" text-anchor="middle" fill="#5A6B4A" font-size="8" font-family="Trebuchet MS,sans-serif">PROTECT</text>
+            <circle cx="55" cy="240" r="14" fill="rgba(196,95,44,0.15)" stroke="#C45F2C" stroke-width="1.5"/>
+            <text x="55" y="244" text-anchor="middle" fill="#C45F2C" font-size="8" font-family="Trebuchet MS,sans-serif">RECOVER</text>
+            <!-- center -->
+            <circle cx="180" cy="180" r="36" fill="rgba(196,95,44,0.1)" stroke="#C45F2C" stroke-width="1.8"/>
+            <path d="M188 162L164 185h14l-6 13L196 175h-14l8-13z" fill="#C45F2C"/>
+            <!-- pulse -->
+            <circle cx="180" cy="180" r="46" stroke="#C45F2C" stroke-width="1" opacity="0.3">
+              <animate attributeName="r" values="36;80;36" dur="2.8s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.3;0;0.3" dur="2.8s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     ⑤ MENTAL HEALTH
+═══════════════════════════════════════════════════ -->
+<section id="mental" aria-labelledby="mental-heading">
+  <div class="blob"></div>
+  <div class="section-inner">
+    <div class="service-layout flip">
+      <!-- cards -->
+      <div>
+        <div class="cards-grid">
+          <div class="card reveal reveal-delay-2">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 22S5 16 5 10a6 6 0 0 1 9-5.2A6 6 0 0 1 23 10c0 6-9 12-9 12z" stroke="#5A6B4A" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <h3>Trauma Support</h3>
+            <p>Trauma-informed counseling and referrals for defenders exposed to violence and fear.</p>
+          </div>
+          <div class="card reveal reveal-delay-3">
+            <div class="card-icon terra" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="10" r="4.5" stroke="#C45F2C" stroke-width="1.5"/><circle cx="6" cy="20" r="3.5" stroke="#C45F2C" stroke-width="1.4"/><circle cx="22" cy="20" r="3.5" stroke="#C45F2C" stroke-width="1.4"/><line x1="10" y1="12" x2="7.5" y2="17" stroke="#C45F2C" stroke-width="1.2"/><line x1="18" y1="12" x2="20.5" y2="17" stroke="#C45F2C" stroke-width="1.2"/></svg>
+            </div>
+            <h3>Peer Support</h3>
+            <p>Community healing spaces where defenders support one another through shared experience.</p>
+          </div>
+          <div class="card reveal reveal-delay-4">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="7" width="20" height="15" rx="3" stroke="#5A6B4A" stroke-width="1.5"/><path d="M9 14h3l2-4 3 6 1.5-2H19" stroke="#C45F2C" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Wellness Programs</h3>
+            <p>Awareness and resilience programs to support mental health in the long term.</p>
+          </div>
+          <div class="card reveal reveal-delay-5">
+            <div class="card-icon terra" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 6v4M14 18v4M6 14h4M18 14h4" stroke="#C45F2C" stroke-width="1.5" stroke-linecap="round"/><circle cx="14" cy="14" r="5" stroke="#C45F2C" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <h3>Crisis Care</h3>
+            <p>Immediate emotional support and stabilization during and after acute crises.</p>
+          </div>
+        </div>
+      </div>
+      <!-- text -->
+      <div>
+        <div class="page-accent reveal"></div>
+        <div class="overline reveal reveal-delay-1">Wellbeing &amp; Recovery</div>
+        <div class="service-header-icon sage reveal reveal-delay-1" aria-hidden="true">
+          <!-- heart + brain waves -->
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path d="M20 34S7 25 7 16a8 8 0 0 1 13-6.2A8 8 0 0 1 33 16c0 9-13 18-13 18z" stroke="#5A6B4A" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
+            <path d="M11 20h4l2.5-5 4 9 2.5-5.5 2 2h2" stroke="#C45F2C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2 class="section-heading reveal reveal-delay-2" id="mental-heading">
+          Mental Health &amp;<br><em>Psychosocial Support</em>
+        </h2>
+        <p class="lead-text reveal reveal-delay-3">
+          Human rights work takes a profound personal toll. Our organization recognizes that
+          burnout, trauma, and fear are occupational realities — and we are here to ensure
+          defenders have the space, support, and care they need to heal and continue.
+        </p>
+        <ul class="service-bullets reveal reveal-delay-4" aria-label="Mental health services">
+          <li class="service-bullet"><span class="bullet-dot sage" aria-hidden="true"></span>Trauma-informed support and counseling referrals</li>
+          <li class="service-bullet"><span class="bullet-dot sage" aria-hidden="true"></span>Peer support and community healing spaces</li>
+          <li class="service-bullet"><span class="bullet-dot sage" aria-hidden="true"></span>Mental wellness awareness programs</li>
+          <li class="service-bullet"><span class="bullet-dot sage" aria-hidden="true"></span>Emotional support during crisis</li>
+          <li class="service-bullet"><span class="bullet-dot sage" aria-hidden="true"></span>Rehabilitation for survivors of violence</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     ⑥ ADVOCACY & SOLIDARITY
+═══════════════════════════════════════════════════ -->
+<section id="advocacy" aria-labelledby="advocacy-heading">
+  <div class="blob"></div>
+  <div class="section-inner">
+    <div class="service-layout">
+      <div>
+        <div class="page-accent reveal"></div>
+        <div class="overline reveal reveal-delay-1">Advocacy &amp; Solidarity</div>
+        <div class="service-header-icon reveal reveal-delay-1" aria-hidden="true">
+          <!-- bridge / amplifier -->
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path d="M3 30c3.5-7 8.5-11 17-11s13.5 4 17 11" stroke="#C45F2C" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <line x1="3" y1="30" x2="3" y2="36" stroke="#C45F2C" stroke-width="2" stroke-linecap="round"/>
+            <line x1="37" y1="30" x2="37" y2="36" stroke="#C45F2C" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="19" x2="20" y2="11" stroke="#5A6B4A" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M15 14 Q20 8 25 14" stroke="#5A6B4A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M11 17 Q20 5 29 17" stroke="#5A6B4A" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".6"/>
+          </svg>
+        </div>
+        <h2 class="section-heading reveal reveal-delay-2" id="advocacy-heading">
+          Advocacy &amp;<br><em>Solidarity Networks</em>
+        </h2>
+        <p class="lead-text reveal reveal-delay-3">
+          Protection is not only reactive — it is structural. We actively advocate for stronger
+          laws, policies, and mechanisms that protect civic space and human rights defenders,
+          while building solidarity networks that amplify their voices globally.
+        </p>
+        <ul class="service-bullets reveal reveal-delay-4" aria-label="Advocacy work">
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Promoting recognition of defenders' work</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Raising awareness about attacks and violations</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Opposing criminalization of activism</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Accountability for perpetrators of abuse</li>
+          <li class="service-bullet"><span class="bullet-dot" aria-hidden="true"></span>Freedom of expression and peaceful assembly</li>
+        </ul>
+        <div class="reveal reveal-delay-5" style="margin-top:2rem;">
+          <button class="btn-sage" onclick="copyEmail()">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M7.5 1C4 1 1 4 1 7.5S4 14 7.5 14 14 11 14 7.5 11 1 7.5 1z" stroke="currentColor" stroke-width="1.5"/><path d="M7.5 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Partner With Us
+          </button>
+        </div>
+      </div>
+      <!-- visual: network of solidarity -->
+      <div class="reveal reveal-delay-3" style="display:flex;align-items:center;justify-content:center;">
+        <div style="max-width:380px;width:100%;" aria-hidden="true">
+          <svg viewBox="0 0 380 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+            <!-- connecting lines -->
+            <line x1="190" y1="190" x2="80" y2="100" stroke="rgba(196,95,44,0.22)" stroke-width="1.4"/>
+            <line x1="190" y1="190" x2="310" y2="100" stroke="rgba(90,107,74,0.22)" stroke-width="1.4"/>
+            <line x1="190" y1="190" x2="340" y2="230" stroke="rgba(196,95,44,0.2)" stroke-width="1.4"/>
+            <line x1="190" y1="190" x2="190" y2="340" stroke="rgba(90,107,74,0.2)" stroke-width="1.4"/>
+            <line x1="190" y1="190" x2="50" y2="250" stroke="rgba(196,95,44,0.18)" stroke-width="1.4"/>
+            <line x1="190" y1="190" x2="120" y2="320" stroke="rgba(90,107,74,0.16)" stroke-width="1.2"/>
+            <line x1="190" y1="190" x2="280" y2="320" stroke="rgba(196,95,44,0.16)" stroke-width="1.2"/>
+            <!-- cross links -->
+            <line x1="80" y1="100" x2="310" y2="100" stroke="rgba(90,107,74,0.12)" stroke-width="1"/>
+            <line x1="310" y1="100" x2="340" y2="230" stroke="rgba(196,95,44,0.12)" stroke-width="1"/>
+            <line x1="50" y1="250" x2="120" y2="320" stroke="rgba(90,107,74,0.1)" stroke-width="1"/>
+            <line x1="280" y1="320" x2="340" y2="230" stroke="rgba(196,95,44,0.1)" stroke-width="1"/>
+            <!-- person icons at each node -->
+            <!-- node 1 -->
+            <circle cx="80" cy="88" r="8" fill="rgba(196,95,44,0.2)" stroke="#C45F2C" stroke-width="1.4"/>
+            <circle cx="80" cy="85" r="3" fill="#C45F2C"/>
+            <path d="M74 96c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#C45F2C" stroke-width="1.2" fill="none"/>
+            <!-- node 2 -->
+            <circle cx="310" cy="88" r="8" fill="rgba(90,107,74,0.2)" stroke="#5A6B4A" stroke-width="1.4"/>
+            <circle cx="310" cy="85" r="3" fill="#5A6B4A"/>
+            <path d="M304 96c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#5A6B4A" stroke-width="1.2" fill="none"/>
+            <!-- node 3 -->
+            <circle cx="340" cy="230" r="8" fill="rgba(196,95,44,0.2)" stroke="#C45F2C" stroke-width="1.4"/>
+            <circle cx="340" cy="227" r="3" fill="#C45F2C"/>
+            <path d="M334 238c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#C45F2C" stroke-width="1.2" fill="none"/>
+            <!-- node 4 -->
+            <circle cx="190" cy="340" r="8" fill="rgba(90,107,74,0.2)" stroke="#5A6B4A" stroke-width="1.4"/>
+            <circle cx="190" cy="337" r="3" fill="#5A6B4A"/>
+            <path d="M184 348c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#5A6B4A" stroke-width="1.2" fill="none"/>
+            <!-- node 5 -->
+            <circle cx="50" cy="250" r="8" fill="rgba(196,95,44,0.2)" stroke="#C45F2C" stroke-width="1.4"/>
+            <circle cx="50" cy="247" r="3" fill="#C45F2C"/>
+            <path d="M44 258c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#C45F2C" stroke-width="1.2" fill="none"/>
+            <!-- smaller nodes -->
+            <circle cx="120" cy="320" r="6" fill="rgba(90,107,74,0.18)" stroke="#5A6B4A" stroke-width="1.2"/>
+            <circle cx="280" cy="320" r="6" fill="rgba(196,95,44,0.18)" stroke="#C45F2C" stroke-width="1.2"/>
+            <!-- center -->
+            <circle cx="190" cy="190" r="30" fill="rgba(90,107,74,0.1)" stroke="#5A6B4A" stroke-width="1.6"/>
+            <!-- bridge symbol center -->
+            <path d="M175 195c2-6 5-8 15-8s13 2 15 8" stroke="#5A6B4A" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <line x1="175" y1="195" x2="175" y2="200" stroke="#5A6B4A" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="205" y1="195" x2="205" y2="200" stroke="#5A6B4A" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="190" y1="187" x2="190" y2="181" stroke="#C45F2C" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M186 184 Q190 180 194 184" stroke="#C45F2C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════ -->
+<footer role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-copy">
+      © 2026 Semena Center &nbsp;·&nbsp; semenacenter.org
+    </div>
+    <button
+      class="footer-email"
+      onclick="copyEmail()"
+      aria-label="Copy email address info@semenacenter.org to clipboard"
+    >
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <rect x="1" y="3" width="12" height="9" rx="2" stroke="rgba(253,251,247,0.6)" stroke-width="1.3"/>
+        <path d="M1 5.5l6 3.5 6-3.5" stroke="#C45F2C" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <span>info@semenacenter.org</span>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+        <rect x="1" y="4" width="7" height="7" rx="1.5" stroke="rgba(253,251,247,0.45)" stroke-width="1.1"/>
+        <path d="M4 4V2.5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H8" stroke="rgba(253,251,247,0.45)" stroke-width="1.1"/>
+      </svg>
+    </button>
+  </div>
 </footer>
-<div id="toastMsg" class="toast-msg">✓ Copied to clipboard</div>
 
+<!-- ═══════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════ -->
 <script>
-    (function() {
-        // ---- HAMBURGER MENU (three dots + bounce every 7 sec)
-        const dotsBtn = document.getElementById('hamburgerDots');
-        const overlay = document.getElementById('menuOverlay');
-        const closeBtn = document.getElementById('closeMenuBtn');
-        const navLinks = document.querySelectorAll('.nav-link');
+/* ── MENU ──────────────────────────────────────────── */
+const trigger  = document.getElementById('menu-trigger');
+const overlay  = document.getElementById('nav-overlay');
+const backdrop = document.getElementById('nav-backdrop');
+let menuOpen = false;
 
-        function openMenu() { overlay.classList.add('open'); }
-        function closeMenu() { overlay.classList.remove('open'); }
-        dotsBtn.addEventListener('click', openMenu);
-        closeBtn.addEventListener('click', closeMenu);
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                closeMenu();
-                const targetId = link.getAttribute('href');
-                if(targetId && targetId !== '#') {
-                    e.preventDefault();
-                    const targetEl = document.querySelector(targetId);
-                    if(targetEl) {
-                        targetEl.scrollIntoView({ behavior: 'smooth' });
-                        history.pushState(null, null, targetId);
-                    }
-                }
-            });
-        });
-        // bounce dots periodically (every 7 seconds)
-        let bounceTimer;
-        function triggerBounce() {
-            dotsBtn.classList.add('bounce');
-            setTimeout(() => {
-                dotsBtn.classList.remove('bounce');
-            }, 400);
-        }
-        function startBounceCycle() {
-            if(bounceTimer) clearInterval(bounceTimer);
-            bounceTimer = setInterval(() => {
-                triggerBounce();
-            }, 7000);
-        }
-        startBounceCycle();
-        // also slight bounce on load after 1 sec
-        setTimeout(triggerBounce, 1000);
+function openMenu() {
+  menuOpen = true;
+  overlay.classList.add('open');
+  backdrop.classList.add('open');
+  trigger.setAttribute('aria-expanded', 'true');
+  trigger.setAttribute('aria-label', 'Close navigation menu');
+  // focus first nav item
+  const first = overlay.querySelector('.nav-item');
+  if (first) setTimeout(() => first.focus(), 450);
+}
 
-        // ---- REVEAL ON SCROLL (text animations)
-        const revealElements = document.querySelectorAll('.reveal-text');
-        function checkReveal() {
-            const windowHeight = window.innerHeight;
-            revealElements.forEach(el => {
-                const rect = el.getBoundingClientRect();
-                const isVisible = rect.top < windowHeight - 100 && rect.bottom > 80;
-                if(isVisible && !el.classList.contains('revealed')) {
-                    el.classList.add('revealed');
-                }
-                // optional: minor case if want to re-trigger? not needed
-            });
-        }
-        window.addEventListener('scroll', checkReveal);
-        window.addEventListener('resize', checkReveal);
-        checkReveal(); // initial
+function closeMenu() {
+  menuOpen = false;
+  overlay.classList.remove('open');
+  backdrop.classList.remove('open');
+  trigger.setAttribute('aria-expanded', 'false');
+  trigger.setAttribute('aria-label', 'Open navigation menu');
+  trigger.focus();
+}
 
-        // ---- COPY EMAIL FUNCTIONALITY (clean footer)
-        const copyBtn = document.getElementById('copyEmailBtn');
-        const toast = document.getElementById('toastMsg');
-        let toastTimeout;
-        function showToast(msg) {
-            toast.textContent = msg || "✓ Copied to clipboard";
-            toast.style.opacity = '1';
-            if(toastTimeout) clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.style.opacity = '0';
-            }, 2000);
-        }
-        copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText('info@semenacenter.org').then(() => {
-                showToast('📧 info@semenacenter.org copied');
-            }).catch(() => {
-                // fallback
-                const textarea = document.createElement('textarea');
-                textarea.value = 'info@semenacenter.org';
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showToast('Copied (fallback)');
-            });
-        });
+trigger.addEventListener('click', () => menuOpen ? closeMenu() : openMenu());
+backdrop.addEventListener('click', closeMenu);
 
-        // smooth anchor + hash update without menu overlay issues
-        document.querySelectorAll('.btn-outline, a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                const hash = this.getAttribute('href');
-                if(hash && hash.startsWith('#')) {
-                    e.preventDefault();
-                    const target = document.querySelector(hash);
-                    if(target) {
-                        target.scrollIntoView({ behavior: 'smooth' });
-                        history.pushState(null, null, hash);
-                        closeMenu(); // also close menu if open
-                    }
-                }
-            });
-        });
-        // if url contains hash on load
-        if(window.location.hash) {
-            const targetEl = document.querySelector(window.location.hash);
-            if(targetEl) setTimeout(() => targetEl.scrollIntoView({ behavior: 'smooth' }), 100);
-        }
-        // close overlay when pressing escape
-        document.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape' && overlay.classList.contains('open')) closeMenu();
-        });
-    })();
+// close on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && menuOpen) closeMenu();
+});
+
+/* ── NAV SCROLL ────────────────────────────────────── */
+function navTo(id) {
+  closeMenu();
+  // small delay for menu close animation
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', '#' + id);
+    }
+  }, 280);
+}
+
+/* service pills on home also use navTo — already wired via onclick */
+
+/* ── DOT DANCE every 7 seconds ─────────────────────── */
+function triggerDotDance() {
+  if (menuOpen) return;
+  trigger.classList.add('dot-dance');
+  // remove after animation completes
+  setTimeout(() => trigger.classList.remove('dot-dance'), 900);
+}
+
+// initial dance on load
+setTimeout(triggerDotDance, 1200);
+// then every 7 seconds
+setInterval(triggerDotDance, 7000);
+
+/* ── EMAIL COPY ────────────────────────────────────── */
+function copyEmail() {
+  const addr = 'info@semenacenter.org';
+  const done = () => showToast('Email copied!');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(addr).then(done).catch(() => fallbackCopy(addr, done));
+  } else {
+    fallbackCopy(addr, done);
+  }
+}
+
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  Object.assign(ta.style, { position:'fixed', opacity:'0', top:'0', left:'0' });
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ── SCROLL REVEAL ─────────────────────────────────── */
+const revealEls = document.querySelectorAll('.reveal');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, {
+  threshold: 0.12,
+  rootMargin: '0px 0px -40px 0px'
+});
+
+revealEls.forEach(el => observer.observe(el));
+
+/* ── HASH on scroll (passive) ──────────────────────── */
+const sections = ['home','emergency','legal','rapid','mental','advocacy'];
+const sectionEls = sections.map(id => document.getElementById(id)).filter(Boolean);
+
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      const scrollY = window.scrollY + window.innerHeight * 0.35;
+      let current = 'home';
+      sectionEls.forEach(s => {
+        if (s.offsetTop <= scrollY) current = s.id;
+      });
+      history.replaceState(null, '', '#' + current);
+      ticking = false;
+    });
+    ticking = true;
+  }
+}, { passive: true });
+
+/* ── INITIAL HASH SCROLL ───────────────────────────── */
+if (window.location.hash) {
+  const target = document.querySelector(window.location.hash);
+  if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 100);
+}
 </script>
 </body>
 </html>
