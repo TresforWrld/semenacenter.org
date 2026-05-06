@@ -947,8 +947,6 @@ footer ul li a:hover { color: var(--white); }
   height: 72px;
   object-fit: contain;
   margin-bottom: 20px;
-  border-radius: 14px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.18);
 }
 
 /* Footer logo — brightened to stand out on dark footer */
@@ -1244,7 +1242,7 @@ function handleContactSubmit(event) {
 
   const mailSubject = subject && subject.value ? subject.value : 'General Inquiry';
   const mailBody = `Name: ${name.value}\nEmail: ${email.value}\n\n${message.value}`;
-  const mailtoLink = `mailto:info@semenacenter.org?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+  const mailtoLink = `mailto:defenders@semenacenter.org?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
 
   window.location.href = mailtoLink;
 }
