@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — Semena Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --fire:#C8282D; --ash:#1A1A1A; }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--ash);color:#fff;font-family:'Barlow Condensed',sans-serif;overflow-x:hidden;cursor:none;}
+  .cursor{position:fixed;width:12px;height:12px;background:var(--fire);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s;}
+  .cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(200,40,45,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .18s ease-out;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:22px 48px;background:rgba(26,26,26,.97);border-bottom:1px solid rgba(200,40,45,.15);}
+  .nav-logo img{height:48px;}
+  .nav-logo span{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;letter-spacing:.12em;color:#fff;text-transform:uppercase;}
+  .hamburger{display:flex;flex-direction:column;gap:5px;cursor:none;background:none;border:none;padding:8px;}
+  .hamburger span{width:6px;height:6px;background:#fff;border-radius:50%;display:block;transition:background .3s,transform .3s;}
+  .hamburger:hover span{background:var(--fire);}
+  .hamburger.active span:nth-child(1){transform:translateY(11px);background:var(--fire);}
+  .hamburger.active span:nth-child(3){transform:translateY(-11px);background:var(--fire);}
+  .nav-dropdown{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,26,26,.98);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transform:translateY(-100%);transition:opacity .5s cubic-bezier(.77,0,.18,1),transform .6s cubic-bezier(.77,0,.18,1);}
+  .nav-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0);}
+  .nav-dropdown ul{list-style:none;text-align:center;}
+  .nav-dropdown ul li{opacity:0;transform:translateY(-28px);transition:opacity .4s ease,transform .4s ease;}
+  .nav-dropdown.open ul li:nth-child(1){opacity:1;transform:translateY(0);transition-delay:.15s;}
+  .nav-dropdown.open ul li:nth-child(2){opacity:1;transform:translateY(0);transition-delay:.22s;}
+  .nav-dropdown.open ul li:nth-child(3){opacity:1;transform:translateY(0);transition-delay:.29s;}
+  .nav-dropdown.open ul li:nth-child(4){opacity:1;transform:translateY(0);transition-delay:.36s;}
+  .nav-dropdown.open ul li:nth-child(5){opacity:1;transform:translateY(0);transition-delay:.43s;}
+  .nav-dropdown.open ul li:nth-child(6){opacity:1;transform:translateY(0);transition-delay:.50s;}
+  .nav-dropdown ul li a{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:300;color:#fff;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;display:block;padding:12px 0;transition:color .3s,letter-spacing .3s;position:relative;}
+  .nav-dropdown ul li a::after{content:'';position:absolute;bottom:8px;left:50%;right:50%;height:1px;background:var(--fire);transition:left .4s,right .4s;}
+  .nav-dropdown ul li a:hover{color:var(--fire);letter-spacing:.12em;}
+  .nav-dropdown ul li a:hover::after{left:0;right:0;}
+  .nav-close-hint{position:absolute;bottom:48px;font-size:.75rem;letter-spacing:.2em;color:rgba(255,255,255,.3);text-transform:uppercase;opacity:0;transition:opacity .4s .5s;}
+  .nav-dropdown.open .nav-close-hint{opacity:1;}
+
+  /* PAGE HERO */
+  .page-hero{position:relative;height:70vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;padding:0 clamp(24px,6vw,96px) 80px;}
+  .page-hero-bg{position:absolute;inset:0;background-image:url('https://i.imgur.com/CQds6I6.jpeg');background-size:cover;background-position:center;animation:slowzoom 18s ease-in-out infinite alternate;}
+  @keyframes slowzoom{from{transform:scale(1.06);}to{transform:scale(1.0);}}
+  .page-hero-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(26,26,26,.7) 0%,rgba(26,26,26,.45) 60%,rgba(26,26,26,.8) 100%);}
+  .page-hero-fire{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,rgba(200,40,45,.25),transparent);}
+  .page-hero-content{position:relative;z-index:2;}
+  .page-eyebrow{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--fire);margin-bottom:16px;}
+  .page-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:300;line-height:1.05;animation:fadeUp 1s .2s both;}
+  .page-hero h1 em{font-style:italic;color:var(--fire);}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:translateY(0);}}
+  /* FIRE LINE */
+  .fire-line{width:100%;height:1px;background:linear-gradient(to right,var(--fire),transparent);margin-bottom:48px;}
+
+  /* CONTENT */
+  .content-pad{padding:100px clamp(24px,6vw,96px);}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+  .sticky-title{position:sticky;top:100px;}
+  .section-label{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--fire);margin-bottom:16px;}
+  .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:300;line-height:1.1;margin-bottom:24px;}
+  .section-title em{font-style:italic;color:var(--fire);}
+  p.body-text{font-size:1rem;color:rgba(255,255,255,.65);line-height:1.85;margin-bottom:24px;font-weight:300;letter-spacing:.02em;}
+  .divider{width:48px;height:2px;background:var(--fire);margin-bottom:32px;}
+  .value-list{list-style:none;margin-top:16px;}
+  .value-list li{padding:18px 0;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:flex-start;gap:16px;font-size:1rem;color:rgba(255,255,255,.7);}
+  .value-list li svg{flex-shrink:0;color:var(--fire);margin-top:2px;}
+  .value-list li strong{color:#fff;display:block;margin-bottom:4px;}
+
+  /* MISSION BAND */
+  .mission-band{background:var(--fire);padding:80px clamp(24px,6vw,96px);position:relative;overflow:hidden;}
+  .mission-band::before{content:'';position:absolute;top:-40px;right:-40px;width:300px;height:300px;border:1px solid rgba(255,255,255,.15);border-radius:50%;}
+  .mission-band blockquote{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:300;line-height:1.2;max-width:800px;position:relative;z-index:1;}
+  .mission-band cite{display:block;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:24px;font-style:normal;}
+
+  .btn-primary{display:inline-block;padding:14px 40px;border:1px solid var(--fire);color:var(--fire);font-family:'Barlow Condensed',sans-serif;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;position:relative;overflow:hidden;transition:color .4s;cursor:none;}
+  .btn-primary::before{content:'';position:absolute;inset:0;background:var(--fire);transform:translateX(-101%);transition:transform .4s cubic-bezier(.77,0,.18,1);}
+  .btn-primary:hover::before{transform:translateX(0);}
+  .btn-primary:hover{color:#fff;}
+  .btn-primary span{position:relative;z-index:1;}
+
+  footer{background:#0d0d0d;padding:60px clamp(24px,6vw,96px) 32px;border-top:1px solid rgba(200,40,45,.15);}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:48px;}
+  .footer-brand p{font-size:.95rem;color:rgba(255,255,255,.45);line-height:1.7;margin-top:20px;max-width:320px;}
+  footer h4{font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;color:var(--fire);margin-bottom:20px;}
+  footer ul{list-style:none;}
+  footer ul li{margin-bottom:10px;}
+  footer ul li a{font-size:.95rem;color:rgba(255,255,255,.5);text-decoration:none;transition:color .3s;}
+  footer ul li a:hover{color:#fff;}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:24px;display:flex;justify-content:space-between;font-size:.78rem;color:rgba(255,255,255,.25);letter-spacing:.08em;}
+  .reveal{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.23,1,.32,1),transform .8s cubic-bezier(.23,1,.32,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  #fire-canvas{position:fixed;bottom:0;left:0;right:0;height:260px;z-index:2;pointer-events:none;opacity:.45;}
+  @media(max-width:768px){nav{padding:16px 24px;}.two-col{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr;gap:36px;}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas id="fire-canvas"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="/logo.png" alt="Semena Center" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <span style="display:none">Semena Center</span>
+  </a>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="nav-dropdown" id="navDropdown">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="legal-aid.html">Legal Aid</a></li>
+    <li><a href="mental-health.html">Mental Health</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <span class="nav-close-hint">Click anywhere to close</span>
+</div>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-fire"></div>
+  <div class="page-hero-content">
+    <p class="page-eyebrow">Who We Are</p>
+    <h1>About <em>Semena</em><br>Center</h1>
+  </div>
+</section>
+
+<section class="content-pad">
+  <div class="fire-line"></div>
+  <div class="two-col reveal">
+    <div class="sticky-title">
+      <p class="section-label">Our Foundation</p>
+      <h2 class="section-title">Built to Shield <em>Those Who Shield</em> Others</h2>
+      <div class="divider"></div>
+      <a href="programs.html" class="btn-primary"><span>View Programs</span></a>
+    </div>
+    <div>
+      <p class="body-text">
+        Semena Center was established in direct response to the increasing threats faced by human rights defenders — the activists, journalists, community leaders, and civil society actors who stand on the front lines of justice, often at great personal cost.
+      </p>
+      <p class="body-text">
+        Our organization recognizes that these defenders cannot be left to face persecution alone. Through coordinated emergency protection, legal aid, mental health support, and international advocacy, we build a shield around those who cannot shield themselves.
+      </p>
+      <p class="body-text">
+        We work across local and international networks, coordinating with trusted partners and protection systems to deliver timely, life-changing interventions. Our approach is holistic — we address not only the immediate physical danger but also the legal, psychological, and social dimensions of threat.
+      </p>
+      <p class="body-text">
+        Semena Center strongly opposes arbitrary arrests, torture, illegal detention, and abuse of power by state or non-state actors. We advocate for freedom of expression, peaceful assembly, and the right of every person to pursue justice without fear.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="mission-band">
+  <blockquote>
+    "Every defender who is silenced represents a community left without a voice. We exist to ensure that silence is never the final word."
+    <cite>— Semena Center Mission Statement</cite>
+  </blockquote>
+</div>
+
+<section class="content-pad" style="background:#111;">
+  <div class="reveal">
+    <p class="section-label">Our Values</p>
+    <h2 class="section-title">What We <em>Stand For</em></h2>
+    <div class="divider"></div>
+  </div>
+  <ul class="value-list reveal">
+    <li>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+      <div><strong>Protection Without Compromise</strong>We stand by defenders at every stage of risk — from early warning to emergency evacuation and recovery.</div>
+    </li>
+    <li>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+      <div><strong>Dignity and Respect</strong>Every person we support is treated with dignity, confidentiality, and cultural sensitivity.</div>
+    </li>
+    <li>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+      <div><strong>Justice and Accountability</strong>We document abuses, advocate for fair trials, and hold perpetrators of rights violations accountable.</div>
+    </li>
+    <li>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+      <div><strong>Solidarity</strong>We believe collective action and international networks are essential to protect civic space and human dignity.</div>
+    </li>
+    <li>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+      <div><strong>Holistic Care</strong>We address the physical, legal, psychological, and social needs of every defender we serve.</div>
+    </li>
+  </ul>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="section-label" style="margin:0">Semena Center</p>
+      <p>Protecting the protectors. Emergency protection, legal aid, mental health support, and advocacy for human rights defenders.</p>
+    </div>
+    <div>
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="legal-aid.html">Legal Aid</a></li>
+        <li><a href="mental-health.html">Mental Health</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="contact.html">Get In Touch</a></li>
+        <li><a href="contact.html">Report an Emergency</a></li>
+        <li><a href="#">semenacenter.org</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Semena Center. All rights reserved.</span>
+    <span>semenacenter.org</span>
+  </div>
+</footer>
+
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},60);});
+const ham=document.getElementById('hamburger'),drop=document.getElementById('navDropdown');
+ham.addEventListener('click',e=>{e.stopPropagation();toggle();});
+drop.addEventListener('click',()=>toggle());
+function toggle(){ham.classList.toggle('active');drop.classList.toggle('open');document.body.style.overflow=drop.classList.contains('open')?'hidden':'';}
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+// fire canvas
+const canvas=document.getElementById('fire-canvas'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=260;}resize();window.addEventListener('resize',resize);
+const COLS=120,ROWS=50,fire=Array.from({length:COLS*ROWS},()=>0);
+function step(){for(let c=0;c<COLS;c++)fire[(ROWS-1)*COLS+c]=220+Math.random()*30|0;for(let r=ROWS-2;r>=0;r--)for(let c=0;c<COLS;c++){const b=(r+1)*COLS+((c+Math.round(Math.random()*2-1)+COLS)%COLS);fire[r*COLS+c]=Math.max(0,fire[b]-(Math.random()*18|0));}}
+function drawFire(){ctx.clearRect(0,0,canvas.width,canvas.height);const cw=canvas.width/COLS,ch=canvas.height/ROWS;for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const v=fire[r*COLS+c];if(!v)continue;const a=v/255;ctx.fillStyle=v>200?`rgba(255,255,220,${a})`:v>140?`rgba(255,160,20,${a})`:v>80?`rgba(200,40,45,${a})`:`rgba(120,10,10,${a})`;ctx.fillRect(c*cw,r*ch,cw+1,ch+1);}}
+function loop(){step();drawFire();requestAnimationFrame(loop);}loop();
+</script>
+</body>
+</html>
