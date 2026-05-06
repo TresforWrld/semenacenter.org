@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mental Health — Semena Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--fire:#C8282D;--ash:#1A1A1A;}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--ash);color:#fff;font-family:'Barlow Condensed',sans-serif;overflow-x:hidden;cursor:none;}
+  .cursor{position:fixed;width:12px;height:12px;background:var(--fire);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+  .cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(200,40,45,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .18s ease-out;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:22px 48px;background:rgba(26,26,26,.97);border-bottom:1px solid rgba(200,40,45,.15);}
+  .nav-logo img{height:48px;}
+  .nav-logo span{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;letter-spacing:.12em;color:#fff;text-transform:uppercase;}
+  .hamburger{display:flex;flex-direction:column;gap:5px;cursor:none;background:none;border:none;padding:8px;}
+  .hamburger span{width:6px;height:6px;background:#fff;border-radius:50%;display:block;transition:background .3s,transform .3s;}
+  .hamburger:hover span{background:var(--fire);}
+  .hamburger.active span:nth-child(1){transform:translateY(11px);background:var(--fire);}
+  .hamburger.active span:nth-child(3){transform:translateY(-11px);background:var(--fire);}
+  .nav-dropdown{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,26,26,.98);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transform:translateY(-100%);transition:opacity .5s cubic-bezier(.77,0,.18,1),transform .6s cubic-bezier(.77,0,.18,1);}
+  .nav-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0);}
+  .nav-dropdown ul{list-style:none;text-align:center;}
+  .nav-dropdown ul li{opacity:0;transform:translateY(-28px);transition:opacity .4s ease,transform .4s ease;}
+  .nav-dropdown.open ul li:nth-child(1){opacity:1;transform:translateY(0);transition-delay:.15s;}
+  .nav-dropdown.open ul li:nth-child(2){opacity:1;transform:translateY(0);transition-delay:.22s;}
+  .nav-dropdown.open ul li:nth-child(3){opacity:1;transform:translateY(0);transition-delay:.29s;}
+  .nav-dropdown.open ul li:nth-child(4){opacity:1;transform:translateY(0);transition-delay:.36s;}
+  .nav-dropdown.open ul li:nth-child(5){opacity:1;transform:translateY(0);transition-delay:.43s;}
+  .nav-dropdown.open ul li:nth-child(6){opacity:1;transform:translateY(0);transition-delay:.50s;}
+  .nav-dropdown ul li a{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:300;color:#fff;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;display:block;padding:12px 0;transition:color .3s,letter-spacing .3s;position:relative;}
+  .nav-dropdown ul li a::after{content:'';position:absolute;bottom:8px;left:50%;right:50%;height:1px;background:var(--fire);transition:left .4s,right .4s;}
+  .nav-dropdown ul li a:hover{color:var(--fire);letter-spacing:.12em;}
+  .nav-dropdown ul li a:hover::after{left:0;right:0;}
+  .nav-close-hint{position:absolute;bottom:48px;font-size:.75rem;letter-spacing:.2em;color:rgba(255,255,255,.3);text-transform:uppercase;opacity:0;transition:opacity .4s .5s;}
+  .nav-dropdown.open .nav-close-hint{opacity:1;}
+
+  .page-hero{position:relative;height:70vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;padding:0 clamp(24px,6vw,96px) 80px;}
+  .page-hero-bg{position:absolute;inset:0;background-image:url('https://i.imgur.com/CQds6I6.jpeg');background-size:cover;background-position:center;animation:slowzoom 18s ease-in-out infinite alternate;}
+  @keyframes slowzoom{from{transform:scale(1.06);}to{transform:scale(1.0);}}
+  .page-hero-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(26,26,26,.7) 0%,rgba(26,26,26,.45) 60%,rgba(26,26,26,.8) 100%);}
+  .page-hero-fire{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,rgba(200,40,45,.25),transparent);}
+  .page-hero-content{position:relative;z-index:2;}
+  .page-eyebrow{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--fire);margin-bottom:16px;}
+  .page-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:300;line-height:1.05;animation:fadeUp 1s .2s both;}
+  .page-hero h1 em{font-style:italic;color:var(--fire);}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:translateY(0);}}
+
+  .section-label{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--fire);margin-bottom:16px;}
+  .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:300;line-height:1.1;margin-bottom:24px;}
+  .section-title em{font-style:italic;color:var(--fire);}
+  .divider{width:48px;height:2px;background:var(--fire);margin-bottom:40px;}
+  .fire-line{width:100%;height:1px;background:linear-gradient(to right,var(--fire),transparent);margin-bottom:48px;}
+  .content-pad{padding:100px clamp(24px,6vw,96px);}
+
+  /* INTRO GRID */
+  .intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+  .intro-grid p{font-size:1.05rem;color:rgba(255,255,255,.65);line-height:1.85;margin-bottom:20px;font-weight:300;}
+  .quote-block{padding:48px;background:#111;border-left:3px solid var(--fire);position:relative;}
+  .quote-block::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:8rem;color:rgba(200,40,45,.15);position:absolute;top:-20px;left:24px;line-height:1;}
+  .quote-block blockquote{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;line-height:1.4;position:relative;z-index:1;}
+
+  /* PILLARS */
+  .mh-pillars{background:#111;padding:100px clamp(24px,6vw,96px);}
+  .mh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2px;margin-top:60px;}
+  .mh-card{background:var(--ash);padding:48px 36px;border-top:2px solid transparent;transition:border-color .4s;}
+  .mh-card:hover{border-color:var(--fire);}
+  .mh-card .icon{color:var(--fire);margin-bottom:24px;}
+  .mh-card h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;margin-bottom:12px;}
+  .mh-card p{font-size:.92rem;color:rgba(255,255,255,.5);line-height:1.7;}
+
+  /* WAVE */
+  .wave-band{padding:80px clamp(24px,6vw,96px);background:var(--ash);display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+  .wave-visual{position:relative;height:320px;overflow:hidden;background:#0d0d0d;}
+  .wave-svg{position:absolute;bottom:0;left:0;right:0;}
+
+  .reach-band{background:var(--fire);padding:80px clamp(24px,6vw,96px);text-align:center;}
+  .reach-band h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:300;margin-bottom:16px;}
+  .reach-band p{color:rgba(255,255,255,.85);max-width:560px;margin:0 auto 32px;}
+  .btn-white{display:inline-block;padding:14px 40px;border:1px solid #fff;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;position:relative;overflow:hidden;transition:color .4s;cursor:none;}
+  .btn-white::before{content:'';position:absolute;inset:0;background:#fff;transform:translateX(-101%);transition:transform .4s cubic-bezier(.77,0,.18,1);}
+  .btn-white:hover::before{transform:translateX(0);}
+  .btn-white:hover{color:var(--fire);}
+  .btn-white span{position:relative;z-index:1;}
+
+  footer{background:#0d0d0d;padding:60px clamp(24px,6vw,96px) 32px;border-top:1px solid rgba(200,40,45,.15);}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:48px;}
+  .footer-brand p{font-size:.95rem;color:rgba(255,255,255,.45);line-height:1.7;margin-top:20px;max-width:320px;}
+  footer h4{font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;color:var(--fire);margin-bottom:20px;}
+  footer ul{list-style:none;}
+  footer ul li{margin-bottom:10px;}
+  footer ul li a{font-size:.95rem;color:rgba(255,255,255,.5);text-decoration:none;transition:color .3s;}
+  footer ul li a:hover{color:#fff;}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:24px;display:flex;justify-content:space-between;font-size:.78rem;color:rgba(255,255,255,.25);letter-spacing:.08em;}
+  .reveal{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.23,1,.32,1),transform .8s cubic-bezier(.23,1,.32,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  #fire-canvas{position:fixed;bottom:0;left:0;right:0;height:260px;z-index:2;pointer-events:none;opacity:.45;}
+  @media(max-width:768px){nav{padding:16px 24px;}.intro-grid,.wave-band{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr;gap:36px;}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas id="fire-canvas"></canvas>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="/logo.png" alt="Semena Center" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <span style="display:none">Semena Center</span>
+  </a>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-dropdown" id="navDropdown">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="legal-aid.html">Legal Aid</a></li>
+    <li><a href="mental-health.html">Mental Health</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <span class="nav-close-hint">Click anywhere to close</span>
+</div>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-fire"></div>
+  <div class="page-hero-content">
+    <p class="page-eyebrow">Care and Healing</p>
+    <h1>Mental Health<br><em>&amp; Psychosocial Support</em></h1>
+  </div>
+</section>
+
+<section class="content-pad">
+  <div class="fire-line"></div>
+  <div class="intro-grid reveal">
+    <div>
+      <p class="section-label">Why It Matters</p>
+      <h2 class="section-title">Defenders Are <em>Human</em> Too</h2>
+      <div class="divider"></div>
+      <p>Human rights work exposes defenders to trauma, sustained fear, burnout, and emotional exhaustion. The psychological weight of this work is real — and often invisible. Semena Center prioritizes mental health not as an afterthought, but as a core protection service.</p>
+      <p>Our psychosocial support programs are trauma-informed, culturally sensitive, and built around dignity. We create spaces where defenders can process their experiences, heal, and restore the inner strength needed to continue their vital work.</p>
+    </div>
+    <div class="quote-block">
+      <blockquote>
+        "You cannot pour from an empty vessel. The wellbeing of defenders is inseparable from the wellbeing of the communities they serve."
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<section class="mh-pillars reveal">
+  <p class="section-label">Support Services</p>
+  <h2 class="section-title">How We <em>Care</em></h2>
+  <div class="divider"></div>
+  <div class="mh-grid">
+    <div class="mh-card">
+      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      <h3>Trauma-Informed Counseling</h3>
+      <p>One-on-one counseling referrals with professionals trained in trauma, crisis response, and human rights work contexts.</p>
+    </div>
+    <div class="mh-card">
+      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+      <h3>Peer Support Networks</h3>
+      <p>Structured peer communities connecting defenders who share similar experiences, building solidarity and reducing isolation.</p>
+    </div>
+    <div class="mh-card">
+      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <h3>Healing Spaces</h3>
+      <p>Safe, confidential environments — physical and virtual — where defenders can rest, reflect, and receive support without judgment.</p>
+    </div>
+    <div class="mh-card">
+      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+      <h3>Crisis Emotional Support</h3>
+      <p>Immediate emotional support during and after crisis situations, ensuring no defender processes acute trauma alone.</p>
+    </div>
+    <div class="mh-card">
+      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Wellness Awareness</h3>
+      <p>Programs and training that help organizations build cultures of mental wellness and recognize signs of burnout in their teams.</p>
+    </div>
+    <div class="mh-card">
+      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <h3>Rehabilitation &amp; Recovery</h3>
+      <p>Long-term rehabilitation assistance for survivors of violence, torture, and severe trauma — restoring function and hope.</p>
+    </div>
+  </div>
+</section>
+
+<div class="reach-band">
+  <h2>You Do Not Have to Carry This Alone</h2>
+  <p>If you are a defender experiencing fear, exhaustion, trauma, or distress — reach out. Confidential support is available.</p>
+  <a href="contact.html" class="btn-white"><span>Seek Support</span></a>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="section-label" style="margin:0">Semena Center</p>
+      <p>Protecting the protectors. Emergency protection, legal aid, mental health support, and advocacy for human rights defenders.</p>
+    </div>
+    <div>
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="legal-aid.html">Legal Aid</a></li>
+        <li><a href="mental-health.html">Mental Health</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="contact.html">Get In Touch</a></li>
+        <li><a href="contact.html">Report an Emergency</a></li>
+        <li><a href="#">semenacenter.org</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Semena Center. All rights reserved.</span>
+    <span>semenacenter.org</span>
+  </div>
+</footer>
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},60);});
+const ham=document.getElementById('hamburger'),drop=document.getElementById('navDropdown');
+ham.addEventListener('click',e=>{e.stopPropagation();toggle();});
+drop.addEventListener('click',()=>toggle());
+function toggle(){ham.classList.toggle('active');drop.classList.toggle('open');document.body.style.overflow=drop.classList.contains('open')?'hidden':'';}
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+const canvas=document.getElementById('fire-canvas'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=260;}resize();window.addEventListener('resize',resize);
+const COLS=120,ROWS=50,fire=Array.from({length:COLS*ROWS},()=>0);
+function step(){for(let c=0;c<COLS;c++)fire[(ROWS-1)*COLS+c]=220+Math.random()*30|0;for(let r=ROWS-2;r>=0;r--)for(let c=0;c<COLS;c++){const b=(r+1)*COLS+((c+Math.round(Math.random()*2-1)+COLS)%COLS);fire[r*COLS+c]=Math.max(0,fire[b]-(Math.random()*18|0));}}
+function drawFire(){ctx.clearRect(0,0,canvas.width,canvas.height);const cw=canvas.width/COLS,ch=canvas.height/ROWS;for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const v=fire[r*COLS+c];if(!v)continue;const a=v/255;ctx.fillStyle=v>200?`rgba(255,255,220,${a})`:v>140?`rgba(255,160,20,${a})`:v>80?`rgba(200,40,45,${a})`:`rgba(120,10,10,${a})`;ctx.fillRect(c*cw,r*ch,cw+1,ch+1);}}
+function loop(){step();drawFire();requestAnimationFrame(loop);}loop();
+</script>
+</body>
+</html>
