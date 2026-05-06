@@ -2,113 +2,36 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2720%27 fill=%27%230D9488%27/%3E%3Ctext x=%2750%27 y=%2768%27 font-family=%27sans-serif%27 font-size=%2760%27 font-weight=%27700%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Legal Aid — Semena Center</title>
+<meta name="description" content="Legal aid and court support for human rights defenders. Court representation, bail support, legal counseling, and documentation of violations.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{--fire:#C8282D;--ash:#1A1A1A;}
-  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{background:var(--ash);color:#fff;font-family:'Barlow Condensed',sans-serif;overflow-x:hidden;cursor:none;}
-  .cursor{position:fixed;width:12px;height:12px;background:var(--fire);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
-  .cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(200,40,45,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .18s ease-out;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:22px 48px;background:rgba(26,26,26,.97);border-bottom:1px solid rgba(200,40,45,.15);}
-  .nav-logo img{height:48px;}
-  .nav-logo span{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;letter-spacing:.12em;color:#fff;text-transform:uppercase;}
-  .hamburger{display:flex;flex-direction:column;gap:5px;cursor:none;background:none;border:none;padding:8px;}
-  .hamburger span{width:6px;height:6px;background:#fff;border-radius:50%;display:block;transition:background .3s,transform .3s;}
-  .hamburger:hover span{background:var(--fire);}
-  .hamburger.active span:nth-child(1){transform:translateY(11px);background:var(--fire);}
-  .hamburger.active span:nth-child(3){transform:translateY(-11px);background:var(--fire);}
-  .nav-dropdown{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,26,26,.98);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transform:translateY(-100%);transition:opacity .5s cubic-bezier(.77,0,.18,1),transform .6s cubic-bezier(.77,0,.18,1);}
-  .nav-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0);}
-  .nav-dropdown ul{list-style:none;text-align:center;}
-  .nav-dropdown ul li{opacity:0;transform:translateY(-28px);transition:opacity .4s ease,transform .4s ease;}
-  .nav-dropdown.open ul li:nth-child(1){opacity:1;transform:translateY(0);transition-delay:.15s;}
-  .nav-dropdown.open ul li:nth-child(2){opacity:1;transform:translateY(0);transition-delay:.22s;}
-  .nav-dropdown.open ul li:nth-child(3){opacity:1;transform:translateY(0);transition-delay:.29s;}
-  .nav-dropdown.open ul li:nth-child(4){opacity:1;transform:translateY(0);transition-delay:.36s;}
-  .nav-dropdown.open ul li:nth-child(5){opacity:1;transform:translateY(0);transition-delay:.43s;}
-  .nav-dropdown.open ul li:nth-child(6){opacity:1;transform:translateY(0);transition-delay:.50s;}
-  .nav-dropdown ul li a{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:300;color:#fff;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;display:block;padding:12px 0;transition:color .3s,letter-spacing .3s;position:relative;}
-  .nav-dropdown ul li a::after{content:'';position:absolute;bottom:8px;left:50%;right:50%;height:1px;background:var(--fire);transition:left .4s,right .4s;}
-  .nav-dropdown ul li a:hover{color:var(--fire);letter-spacing:.12em;}
-  .nav-dropdown ul li a:hover::after{left:0;right:0;}
-  .nav-close-hint{position:absolute;bottom:48px;font-size:.75rem;letter-spacing:.2em;color:rgba(255,255,255,.3);text-transform:uppercase;opacity:0;transition:opacity .4s .5s;}
-  .nav-dropdown.open .nav-close-hint{opacity:1;}
-
-  .page-hero{position:relative;height:70vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;padding:0 clamp(24px,6vw,96px) 80px;}
-  .page-hero-bg{position:absolute;inset:0;background-image:url('https://i.imgur.com/CQds6I6.jpeg');background-size:cover;background-position:center;animation:slowzoom 18s ease-in-out infinite alternate;}
-  @keyframes slowzoom{from{transform:scale(1.06);}to{transform:scale(1.0);}}
-  .page-hero-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(26,26,26,.7) 0%,rgba(26,26,26,.45) 60%,rgba(26,26,26,.8) 100%);}
-  .page-hero-fire{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,rgba(200,40,45,.25),transparent);}
-  .page-hero-content{position:relative;z-index:2;}
-  .page-eyebrow{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--fire);margin-bottom:16px;}
-  .page-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:300;line-height:1.05;animation:fadeUp 1s .2s both;}
-  .page-hero h1 em{font-style:italic;color:var(--fire);}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:translateY(0);}}
-
-  .section-label{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--fire);margin-bottom:16px;}
-  .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:300;line-height:1.1;margin-bottom:24px;}
-  .section-title em{font-style:italic;color:var(--fire);}
-  .divider{width:48px;height:2px;background:var(--fire);margin-bottom:40px;}
-  .fire-line{width:100%;height:1px;background:linear-gradient(to right,var(--fire),transparent);margin-bottom:48px;}
-  .content-pad{padding:100px clamp(24px,6vw,96px);}
-
-  .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;margin-top:60px;}
-  .service-card{background:#111;padding:48px 36px;border-left:2px solid transparent;transition:border-color .4s,background .4s;cursor:none;}
-  .service-card:hover{border-color:var(--fire);background:#161616;}
-  .service-card .icon{color:var(--fire);margin-bottom:24px;}
-  .service-card h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;margin-bottom:12px;}
-  .service-card p{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.7;}
-
-  .process-section{background:#111;padding:100px clamp(24px,6vw,96px);}
-  .process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:60px;}
-  .step{position:relative;padding-top:40px;}
-  .step::before{content:attr(data-step);position:absolute;top:0;left:0;font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:rgba(200,40,45,.2);line-height:1;}
-  .step h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:12px;}
-  .step p{font-size:.92rem;color:rgba(255,255,255,.5);line-height:1.7;}
-  .step-connector{position:absolute;top:16px;left:50%;width:100%;height:1px;background:rgba(200,40,45,.2);}
-
-  .urgent-band{background:var(--fire);padding:80px clamp(24px,6vw,96px);text-align:center;position:relative;overflow:hidden;}
-  .urgent-band::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(0,0,0,.05) 0px,rgba(0,0,0,.05) 1px,transparent 1px,transparent 20px);}
-  .urgent-band > *{position:relative;z-index:1;}
-  .urgent-band h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:300;margin-bottom:16px;}
-  .urgent-band p{font-size:1rem;color:rgba(255,255,255,.8);max-width:560px;margin:0 auto 32px;}
-  .btn-white{display:inline-block;padding:14px 40px;border:1px solid #fff;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;position:relative;overflow:hidden;transition:color .4s;cursor:none;}
-  .btn-white::before{content:'';position:absolute;inset:0;background:#fff;transform:translateX(-101%);transition:transform .4s cubic-bezier(.77,0,.18,1);}
-  .btn-white:hover::before{transform:translateX(0);}
-  .btn-white:hover{color:var(--fire);}
-  .btn-white span{position:relative;z-index:1;}
-
-  footer{background:#0d0d0d;padding:60px clamp(24px,6vw,96px) 32px;border-top:1px solid rgba(200,40,45,.15);}
-  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:48px;}
-  .footer-brand p{font-size:.95rem;color:rgba(255,255,255,.45);line-height:1.7;margin-top:20px;max-width:320px;}
-  footer h4{font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;color:var(--fire);margin-bottom:20px;}
-  footer ul{list-style:none;}
-  footer ul li{margin-bottom:10px;}
-  footer ul li a{font-size:.95rem;color:rgba(255,255,255,.5);text-decoration:none;transition:color .3s;}
-  footer ul li a:hover{color:#fff;}
-  .footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:24px;display:flex;justify-content:space-between;font-size:.78rem;color:rgba(255,255,255,.25);letter-spacing:.08em;}
-  .reveal{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.23,1,.32,1),transform .8s cubic-bezier(.23,1,.32,1);}
-  .reveal.in{opacity:1;transform:translateY(0);}
-  #fire-canvas{position:fixed;bottom:0;left:0;right:0;height:260px;z-index:2;pointer-events:none;opacity:.45;}
-  @media(max-width:768px){nav{padding:16px 24px;}.process-steps{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr;gap:36px;}}
-</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
 <body>
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<canvas id="fire-canvas"></canvas>
-<nav>
-  <a href="index.html" class="nav-logo">
-    <img src="/logo.png" alt="Semena Center" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-    <span style="display:none">Semena Center</span>
-  </a>
-  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-inner">
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="nav-logo">
+      <span class="logo-text">Semena Center</span>
+    </a>
+    <div class="nav-spacer"></div>
+  </div>
 </nav>
+
+<!-- NAV DROPDOWN -->
 <div class="nav-dropdown" id="navDropdown">
+  <button class="nav-close" id="navClose" aria-label="Close menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
   <ul>
     <li><a href="index.html">Home</a></li>
     <li><a href="about.html">About Us</a></li>
@@ -117,137 +40,169 @@
     <li><a href="mental-health.html">Mental Health</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
-  <span class="nav-close-hint">Click anywhere to close</span>
 </div>
 
+<!-- PAGE HERO -->
 <section class="page-hero">
-  <div class="page-hero-bg"></div>
-  <div class="page-hero-overlay"></div>
-  <div class="page-hero-fire"></div>
-  <div class="page-hero-content">
-    <p class="page-eyebrow">Access to Justice</p>
-    <h1>Legal Aid<br><em>&amp; Court Support</em></h1>
-  </div>
-</section>
-
-<section class="content-pad reveal">
-  <div class="fire-line"></div>
-  <p class="section-label">Legal Services</p>
-  <h2 class="section-title">Justice for Every <em>Defender</em></h2>
-  <div class="divider"></div>
-  <p style="font-size:1.05rem;color:rgba(255,255,255,.65);line-height:1.85;max-width:700px;">
-    Semena Center collaborates with lawyers, legal aid providers, and human rights institutions to ensure that defenders facing persecution have access to competent legal representation and fair judicial processes. We strongly oppose arbitrary arrests, torture, illegal detention, and any abuse of power.
-  </p>
-  <div class="services-grid">
-    <div class="service-card">
-      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-      <h3>Legal Counseling</h3>
-      <p>Expert legal guidance helping defenders understand their rights, risks, and options at every stage of a legal process.</p>
-    </div>
-    <div class="service-card">
-      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div>
-      <h3>Court Representation</h3>
-      <p>Direct court representation and referrals to trusted legal partners who specialize in human rights law.</p>
-    </div>
-    <div class="service-card">
-      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-      <h3>Bail Support</h3>
-      <p>Assistance securing bail and bond for unlawfully arrested activists and defenders, ensuring their freedom during proceedings.</p>
-    </div>
-    <div class="service-card">
-      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-      <h3>Violation Documentation</h3>
-      <p>Systematic documentation of human rights violations and abuses to support litigation and accountability efforts.</p>
-    </div>
-    <div class="service-card">
-      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-      <h3>Detention Monitoring</h3>
-      <p>Close monitoring of unlawful detention and court proceedings to ensure due process is followed and abuses are flagged.</p>
-    </div>
-    <div class="service-card">
-      <div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-      <h3>Complaints &amp; Petitions</h3>
-      <p>Support in filing formal complaints and petitions before relevant local, regional, and international authorities.</p>
+  <div class="container">
+    <div class="page-hero-content">
+      <p class="page-eyebrow">Justice & Accountability</p>
+      <h1>Legal <em>Aid</em></h1>
     </div>
   </div>
 </section>
 
-<section class="process-section reveal">
-  <p class="section-label">How It Works</p>
-  <h2 class="section-title">Our Legal <em>Process</em></h2>
-  <div class="divider"></div>
-  <div class="process-steps">
-    <div class="step" data-step="01">
-      <h4>Intake &amp; Assessment</h4>
-      <p>We receive your case, assess the urgency and legal context, and assign the right legal resource immediately.</p>
-    </div>
-    <div class="step" data-step="02">
-      <h4>Legal Matching</h4>
-      <p>We connect you with a specialist lawyer or legal aid provider from our trusted partner network.</p>
-    </div>
-    <div class="step" data-step="03">
-      <h4>Active Representation</h4>
-      <p>Our legal partners provide court representation, documentation support, and ongoing counseling.</p>
-    </div>
-    <div class="step" data-step="04">
-      <h4>Monitoring &amp; Follow-up</h4>
-      <p>We monitor proceedings, document outcomes, and advocate for accountability where violations occur.</p>
+<!-- INTRO -->
+<section class="content-pad">
+  <div class="container">
+    <div class="aqua-line"></div>
+    <div class="two-col reveal">
+      <div>
+        <p class="section-label">Our Legal Support</p>
+        <h2 class="section-title">Access to <em>Justice</em> for Defenders</h2>
+        <div class="divider"></div>
+        <p class="body-text">Our organization supports human rights defenders and victims of abuse through legal assistance and referrals. We collaborate with lawyers, legal aid providers, and human rights institutions to ensure access to justice and fair legal representation.</p>
+        <p class="body-text">The organization strongly opposes arbitrary arrests, torture, illegal detention, and abuse of power by state or non-state actors. We advocate for fair trials, due process, and the right of every person to legal representation.</p>
+      </div>
+      <div>
+        <p class="body-text">Our legal support services include comprehensive assistance at every stage of the legal process, from initial counseling through court representation and post-trial advocacy. We work to ensure that no defender faces the legal system alone.</p>
+        <a href="contact.html" class="btn-primary" style="margin-top:16px">Request Legal Aid</a>
+      </div>
     </div>
   </div>
 </section>
 
-<div class="urgent-band">
-  <h2>Facing Arrest or Prosecution?</h2>
-  <p>If you or a defender you know is facing unlawful detention or urgent legal threat, contact us immediately. We respond within hours.</p>
-  <a href="contact.html" class="btn-white"><span>Contact Us Now</span></a>
-</div>
+<!-- SERVICES GRID -->
+<section class="content-pad" style="background: var(--bg-light);">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Our Services</p>
+      <h2 class="section-title">Legal Support <em>Services</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="services-grid reveal">
+      <div class="service-card">
+        <div class="icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <h3>Legal Counseling & Guidance</h3>
+        <p>Professional legal advice and guidance to help defenders understand their rights, options, and the legal processes relevant to their situations.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+        </div>
+        <h3>Court Representation</h3>
+        <p>Legal representation in court proceedings through our network of partner lawyers and legal aid organizations committed to defending human rights.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+        </div>
+        <h3>Bail & Bond Support</h3>
+        <p>Support for unlawfully arrested activists and defenders, including bail and bond assistance to secure their release from detention.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <h3>Monitoring & Documentation</h3>
+        <p>Monitoring unlawful detention and court proceedings, and documenting human rights violations and abuses for accountability and advocacy purposes.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h3>Fair Trial Advocacy</h3>
+        <p>Advocacy for fair trials and due process, ensuring that defenders receive just treatment under the law and that their rights are upheld.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <h3>Complaints & Petitions</h3>
+        <p>Support in filing complaints and petitions before relevant authorities, helping defenders seek redress and accountability for violations.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- PROCESS -->
+<section class="process-section">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">How It Works</p>
+      <h2 class="section-title">Our Legal Aid <em>Process</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="process-steps reveal">
+      <div class="step" data-step="01">
+        <h4>Contact Us</h4>
+        <p>Reach out through our secure contact form or email. All communications are handled with strict confidentiality.</p>
+      </div>
+      <div class="step" data-step="02">
+        <h4>Assessment</h4>
+        <p>Our team reviews your case and connects you with appropriate legal counsel from our partner network.</p>
+      </div>
+      <div class="step" data-step="03">
+        <h4>Representation</h4>
+        <p>Legal representation and support through court proceedings, bail hearings, and documentation processes.</p>
+      </div>
+      <div class="step" data-step="04">
+        <h4>Follow-Up</h4>
+        <p>Continued advocacy, monitoring, and support to ensure fair outcomes and accountability for violations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band reveal">
+  <div class="container">
+    <p class="section-label">Need Legal Help?</p>
+    <h2>Access to <em>Justice</em> Is a Right</h2>
+    <p>If you are a human rights defender in need of legal assistance, we are here to help. All communications are treated with the highest standards of confidentiality.</p>
+    <div class="cta-buttons">
+      <a href="contact.html" class="btn-primary btn-filled">Request Legal Aid</a>
+      <a href="programs.html" class="btn-primary">View All Programs</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <p class="section-label" style="margin:0">Semena Center</p>
-      <p>Protecting the protectors. Emergency protection, legal aid, mental health support, and advocacy for human rights defenders.</p>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <p class="footer-logo-text">Semena Center</p>
+        <p>Protecting the protectors. Emergency protection, legal aid, mental health support, and advocacy for human rights defenders.</p>
+      </div>
+      <div>
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="legal-aid.html">Legal Aid</a></li>
+          <li><a href="mental-health.html">Mental Health</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="contact.html">Get In Touch</a></li>
+          <li><a href="mailto:info@semenacenter.org">info@semenacenter.org</a></li>
+          <li><a href="contact.html">Legal Aid Referrals</a></li>
+        </ul>
+      </div>
     </div>
-    <div>
-      <h4>Navigate</h4>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="programs.html">Programs</a></li>
-        <li><a href="legal-aid.html">Legal Aid</a></li>
-        <li><a href="mental-health.html">Mental Health</a></li>
-      </ul>
+    <div class="footer-bottom">
+      <span>&copy; 2025 Semena Center. All rights reserved.</span>
+      <span>semenacenter.org</span>
     </div>
-    <div>
-      <h4>Contact</h4>
-      <ul>
-        <li><a href="contact.html">Get In Touch</a></li>
-        <li><a href="contact.html">Report an Emergency</a></li>
-        <li><a href="#">semenacenter.org</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>&copy; 2025 Semena Center. All rights reserved.</span>
-    <span>semenacenter.org</span>
   </div>
 </footer>
 
-<script>
-const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
-document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},60);});
-const ham=document.getElementById('hamburger'),drop=document.getElementById('navDropdown');
-ham.addEventListener('click',e=>{e.stopPropagation();toggle();});
-drop.addEventListener('click',()=>toggle());
-function toggle(){ham.classList.toggle('active');drop.classList.toggle('open');document.body.style.overflow=drop.classList.contains('open')?'hidden':'';}
-const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-const canvas=document.getElementById('fire-canvas'),ctx=canvas.getContext('2d');
-function resize(){canvas.width=window.innerWidth;canvas.height=260;}resize();window.addEventListener('resize',resize);
-const COLS=120,ROWS=50,fire=Array.from({length:COLS*ROWS},()=>0);
-function step(){for(let c=0;c<COLS;c++)fire[(ROWS-1)*COLS+c]=220+Math.random()*30|0;for(let r=ROWS-2;r>=0;r--)for(let c=0;c<COLS;c++){const b=(r+1)*COLS+((c+Math.round(Math.random()*2-1)+COLS)%COLS);fire[r*COLS+c]=Math.max(0,fire[b]-(Math.random()*18|0));}}
-function drawFire(){ctx.clearRect(0,0,canvas.width,canvas.height);const cw=canvas.width/COLS,ch=canvas.height/ROWS;for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const v=fire[r*COLS+c];if(!v)continue;const a=v/255;ctx.fillStyle=v>200?`rgba(255,255,220,${a})`:v>140?`rgba(255,160,20,${a})`:v>80?`rgba(200,40,45,${a})`:`rgba(120,10,10,${a})`;ctx.fillRect(c*cw,r*ch,cw+1,ch+1);}}
-function loop(){step();drawFire();requestAnimationFrame(loop);}loop();
-</script>
+<script src="main.js"></script>
 </body>
 </html>
