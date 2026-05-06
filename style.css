@@ -917,3 +917,27 @@ footer ul li a:hover { color: var(--white); }
   .impact-grid { grid-template-columns: 1fr 1fr; }
   .pillars-grid { grid-template-columns: 1fr; }
 }
+
+/* ========================================
+   LOGO IMAGES
+   ======================================== */
+
+/* Hero logo — top of hero / page-hero */
+.hero-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  margin-bottom: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+}
+
+/* Footer logo — brightened to stand out on dark footer */
+.footer-logo-img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  filter: brightness(1.25) drop-shadow(0 2px 8px rgba(255,255,255,0.15));
+}
