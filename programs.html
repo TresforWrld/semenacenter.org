@@ -2,112 +2,36 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2720%27 fill=%27%230D9488%27/%3E%3Ctext x=%2750%27 y=%2768%27 font-family=%27sans-serif%27 font-size=%2760%27 font-weight=%27700%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Programs — Semena Center</title>
+<meta name="description" content="Explore Semena Center's programs: emergency protection, legal aid, rapid response, mental health support, advocacy, and solidarity networks.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{--fire:#C8282D;--ash:#1A1A1A;}
-  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{background:var(--ash);color:#fff;font-family:'Barlow Condensed',sans-serif;overflow-x:hidden;cursor:none;}
-  .cursor{position:fixed;width:12px;height:12px;background:var(--fire);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
-  .cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(200,40,45,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .18s ease-out;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:22px 48px;background:rgba(26,26,26,.97);border-bottom:1px solid rgba(200,40,45,.15);}
-  .nav-logo img{height:48px;}
-  .nav-logo span{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;letter-spacing:.12em;color:#fff;text-transform:uppercase;}
-  .hamburger{display:flex;flex-direction:column;gap:5px;cursor:none;background:none;border:none;padding:8px;}
-  .hamburger span{width:6px;height:6px;background:#fff;border-radius:50%;display:block;transition:background .3s,transform .3s;}
-  .hamburger:hover span{background:var(--fire);}
-  .hamburger.active span:nth-child(1){transform:translateY(11px);background:var(--fire);}
-  .hamburger.active span:nth-child(3){transform:translateY(-11px);background:var(--fire);}
-  .nav-dropdown{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,26,26,.98);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transform:translateY(-100%);transition:opacity .5s cubic-bezier(.77,0,.18,1),transform .6s cubic-bezier(.77,0,.18,1);}
-  .nav-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0);}
-  .nav-dropdown ul{list-style:none;text-align:center;}
-  .nav-dropdown ul li{opacity:0;transform:translateY(-28px);transition:opacity .4s ease,transform .4s ease;}
-  .nav-dropdown.open ul li:nth-child(1){opacity:1;transform:translateY(0);transition-delay:.15s;}
-  .nav-dropdown.open ul li:nth-child(2){opacity:1;transform:translateY(0);transition-delay:.22s;}
-  .nav-dropdown.open ul li:nth-child(3){opacity:1;transform:translateY(0);transition-delay:.29s;}
-  .nav-dropdown.open ul li:nth-child(4){opacity:1;transform:translateY(0);transition-delay:.36s;}
-  .nav-dropdown.open ul li:nth-child(5){opacity:1;transform:translateY(0);transition-delay:.43s;}
-  .nav-dropdown.open ul li:nth-child(6){opacity:1;transform:translateY(0);transition-delay:.50s;}
-  .nav-dropdown ul li a{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:300;color:#fff;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;display:block;padding:12px 0;transition:color .3s,letter-spacing .3s;position:relative;}
-  .nav-dropdown ul li a::after{content:'';position:absolute;bottom:8px;left:50%;right:50%;height:1px;background:var(--fire);transition:left .4s,right .4s;}
-  .nav-dropdown ul li a:hover{color:var(--fire);letter-spacing:.12em;}
-  .nav-dropdown ul li a:hover::after{left:0;right:0;}
-  .nav-close-hint{position:absolute;bottom:48px;font-size:.75rem;letter-spacing:.2em;color:rgba(255,255,255,.3);text-transform:uppercase;opacity:0;transition:opacity .4s .5s;}
-  .nav-dropdown.open .nav-close-hint{opacity:1;}
-
-  .page-hero{position:relative;height:70vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;padding:0 clamp(24px,6vw,96px) 80px;}
-  .page-hero-bg{position:absolute;inset:0;background-image:url('https://i.imgur.com/CQds6I6.jpeg');background-size:cover;background-position:center;animation:slowzoom 18s ease-in-out infinite alternate;}
-  @keyframes slowzoom{from{transform:scale(1.06);}to{transform:scale(1.0);}}
-  .page-hero-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(26,26,26,.7) 0%,rgba(26,26,26,.45) 60%,rgba(26,26,26,.8) 100%);}
-  .page-hero-fire{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,rgba(200,40,45,.25),transparent);}
-  .page-hero-content{position:relative;z-index:2;}
-  .page-eyebrow{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--fire);margin-bottom:16px;}
-  .page-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:300;line-height:1.05;animation:fadeUp 1s .2s both;}
-  .page-hero h1 em{font-style:italic;color:var(--fire);}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:translateY(0);}}
-
-  .section-label{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--fire);margin-bottom:16px;}
-  .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:300;line-height:1.1;margin-bottom:24px;}
-  .section-title em{font-style:italic;color:var(--fire);}
-  .divider{width:48px;height:2px;background:var(--fire);margin-bottom:40px;}
-  .fire-line{width:100%;height:1px;background:linear-gradient(to right,var(--fire),transparent);margin-bottom:48px;}
-
-  .programs-intro{padding:100px clamp(24px,6vw,96px) 60px;}
-  .programs-intro p{font-size:1.1rem;color:rgba(255,255,255,.65);line-height:1.85;max-width:700px;}
-
-  /* PROGRAM BLOCKS */
-  .program-block{display:grid;grid-template-columns:1fr 1fr;min-height:540px;}
-  .program-block:nth-child(even){direction:rtl;}
-  .program-block:nth-child(even)>*{direction:ltr;}
-  .program-image{position:relative;overflow:hidden;}
-  .program-image img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.23,1,.32,1);}
-  .program-block:hover .program-image img{transform:scale(1.04);}
-  .program-image-fire{position:absolute;bottom:0;left:0;right:0;height:160px;background:linear-gradient(to top,rgba(200,40,45,.3),transparent);}
-  .program-content{background:#111;padding:80px 60px;display:flex;flex-direction:column;justify-content:center;}
-  .prog-num{font-family:'Cormorant Garamond',serif;font-size:5rem;font-weight:300;color:rgba(200,40,45,.15);line-height:1;margin-bottom:8px;}
-  .program-content h2{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;margin-bottom:20px;}
-  .program-content p{font-size:1rem;color:rgba(255,255,255,.6);line-height:1.8;margin-bottom:24px;font-weight:300;}
-  .service-list{list-style:none;margin-bottom:32px;}
-  .service-list li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.92rem;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:12px;}
-  .service-list li svg{color:var(--fire);flex-shrink:0;}
-  .btn-primary{display:inline-block;padding:14px 40px;border:1px solid var(--fire);color:var(--fire);font-family:'Barlow Condensed',sans-serif;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;position:relative;overflow:hidden;transition:color .4s;cursor:none;}
-  .btn-primary::before{content:'';position:absolute;inset:0;background:var(--fire);transform:translateX(-101%);transition:transform .4s cubic-bezier(.77,0,.18,1);}
-  .btn-primary:hover::before{transform:translateX(0);}
-  .btn-primary:hover{color:#fff;}
-  .btn-primary span{position:relative;z-index:1;}
-
-  footer{background:#0d0d0d;padding:60px clamp(24px,6vw,96px) 32px;border-top:1px solid rgba(200,40,45,.15);}
-  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:48px;}
-  .footer-brand p{font-size:.95rem;color:rgba(255,255,255,.45);line-height:1.7;margin-top:20px;max-width:320px;}
-  footer h4{font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;color:var(--fire);margin-bottom:20px;}
-  footer ul{list-style:none;}
-  footer ul li{margin-bottom:10px;}
-  footer ul li a{font-size:.95rem;color:rgba(255,255,255,.5);text-decoration:none;transition:color .3s;}
-  footer ul li a:hover{color:#fff;}
-  .footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:24px;display:flex;justify-content:space-between;font-size:.78rem;color:rgba(255,255,255,.25);letter-spacing:.08em;}
-  .reveal{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.23,1,.32,1),transform .8s cubic-bezier(.23,1,.32,1);}
-  .reveal.in{opacity:1;transform:translateY(0);}
-  #fire-canvas{position:fixed;bottom:0;left:0;right:0;height:260px;z-index:2;pointer-events:none;opacity:.45;}
-  @media(max-width:768px){nav{padding:16px 24px;}.program-block,.program-block:nth-child(even){grid-template-columns:1fr;direction:ltr;}.program-content{padding:48px 24px;}.footer-grid{grid-template-columns:1fr;gap:36px;}}
-</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
 <body>
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<canvas id="fire-canvas"></canvas>
 
-<nav>
-  <a href="index.html" class="nav-logo">
-    <img src="/logo.png" alt="Semena Center" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-    <span style="display:none">Semena Center</span>
-  </a>
-  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-inner">
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="nav-logo">
+      <span class="logo-text">Semena Center</span>
+    </a>
+    <div class="nav-spacer"></div>
+  </div>
 </nav>
 
+<!-- NAV DROPDOWN -->
 <div class="nav-dropdown" id="navDropdown">
+  <button class="nav-close" id="navClose" aria-label="Close menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
   <ul>
     <li><a href="index.html">Home</a></li>
     <li><a href="about.html">About Us</a></li>
@@ -116,136 +40,149 @@
     <li><a href="mental-health.html">Mental Health</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
-  <span class="nav-close-hint">Click anywhere to close</span>
 </div>
 
+<!-- PAGE HERO -->
 <section class="page-hero">
-  <div class="page-hero-bg"></div>
-  <div class="page-hero-overlay"></div>
-  <div class="page-hero-fire"></div>
-  <div class="page-hero-content">
-    <p class="page-eyebrow">What We Do</p>
-    <h1>Our <em>Programs</em></h1>
+  <div class="container">
+    <div class="page-hero-content">
+      <p class="page-eyebrow">What We Do</p>
+      <h1>Our <em>Programs</em></h1>
+    </div>
   </div>
 </section>
 
-<div class="programs-intro reveal">
-  <div class="fire-line"></div>
-  <p class="section-label">Protection Mechanisms</p>
-  <h2 class="section-title">Six Pillars of <em>Protection</em></h2>
-  <div class="divider"></div>
-  <p>
-    Semena Center operates a suite of integrated protection programs that address every dimension of risk faced by human rights defenders — from immediate physical threats to long-term psychological recovery.
-  </p>
-</div>
+<!-- INTRO -->
+<section class="programs-intro">
+  <div class="container">
+    <div class="aqua-line"></div>
+    <p class="reveal">Due to the increasing risks faced by human rights defenders, especially those working with vulnerable and marginalized communities, the organization has established protection and emergency response mechanisms aimed at ensuring their safety, freedom, and continued ability to carry out their work without fear.</p>
+  </div>
+</section>
 
-<!-- PROGRAM 1 -->
+<!-- PROGRAM 1: EMERGENCY PROTECTION -->
 <div class="program-block reveal">
-  <div class="program-image">
-    <img src="https://i.imgur.com/CQds6I6.jpeg" alt="Emergency Protection">
-    <div class="program-image-fire"></div>
+  <div class="program-image" style="background: linear-gradient(135deg, var(--aqua-50), var(--aqua-200));">
+    <div style="padding: 60px; display: flex; align-items: center; justify-content: center; height: 100%;">
+      <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="var(--aqua)" stroke-width="0.8" opacity="0.6">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
   </div>
   <div class="program-content">
     <div class="prog-num">01</div>
-    <p class="section-label">Program One</p>
-    <h2>Emergency Protection<br><em>&amp; Relocation</em></h2>
-    <p>We provide immediate shelter, transportation, evacuation, and crisis support for defenders at imminent risk of violence, persecution, or arbitrary arrest.</p>
+    <h2>Emergency Protection & Relocation</h2>
+    <p>The organization provides emergency support and temporary relocation assistance for human rights defenders who are at immediate risk of violence, arbitrary arrest, persecution, threats, or attacks.</p>
     <ul class="service-list">
-      <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Safe shelter and temporary accommodation</li>
-      <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Emergency transportation and evacuation</li>
-      <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Partner network coordination</li>
-      <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Food, medical care, and psychosocial support</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Safe shelter and temporary accommodation</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Emergency transportation and evacuation support</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Coordination with trusted partners and protection networks</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Basic necessities including food, medical care, and psychosocial support</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Reintegration and recovery support after crisis situations</li>
     </ul>
-    <a href="contact.html" class="btn-primary"><span>Request Support</span></a>
+    <a href="contact.html" class="btn-primary">Request Support</a>
   </div>
 </div>
 
-<!-- PROGRAM 2 -->
+<!-- PROGRAM 2: LEGAL AID -->
 <div class="program-block reveal">
-  <div class="program-image">
-    <img src="https://i.imgur.com/CQds6I6.jpeg" alt="Legal Aid" style="filter:hue-rotate(0deg);">
-    <div class="program-image-fire"></div>
+  <div class="program-image" style="background: linear-gradient(135deg, var(--aqua-100), var(--aqua-50));">
+    <div style="padding: 60px; display: flex; align-items: center; justify-content: center; height: 100%;">
+      <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="var(--aqua)" stroke-width="0.8" opacity="0.6">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 16v-4"/>
+        <path d="M12 8h.01"/>
+      </svg>
+    </div>
   </div>
   <div class="program-content">
     <div class="prog-num">02</div>
-    <p class="section-label">Program Two</p>
-    <h2>Legal Aid<br><em>&amp; Court Support</em></h2>
-    <p>We connect defenders with lawyers, legal aid providers, and human rights institutions to ensure access to justice, fair representation, and protection from abuse of power.</p>
+    <h2>Legal Aid & Court Support</h2>
+    <p>Our organization supports human rights defenders and victims of abuse through legal assistance and referrals. We collaborate with lawyers, legal aid providers, and human rights institutions to ensure access to justice and fair legal representation.</p>
     <ul class="service-list">
-      <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Legal counseling and court representation</li>
-      <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Bail and bond support for unlawfully arrested defenders</li>
-      <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Documentation of human rights violations</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Legal counseling and guidance</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Court representation and legal referrals</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Bail and bond support for unlawfully arrested activists</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Documentation of human rights violations and abuses</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Advocacy for fair trials and due process</li>
     </ul>
-    <a href="legal-aid.html" class="btn-primary"><span>Learn More</span></a>
+    <a href="legal-aid.html" class="btn-primary">Learn More</a>
   </div>
 </div>
 
-<!-- PROGRAM 3 -->
+<!-- PROGRAM 3: RAPID RESPONSE -->
 <div class="program-block reveal">
-  <div class="program-image">
-    <img src="https://i.imgur.com/CQds6I6.jpeg" alt="Rapid Response">
-    <div class="program-image-fire"></div>
+  <div class="program-image" style="background: linear-gradient(135deg, var(--aqua-50), var(--aqua-100));">
+    <div style="padding: 60px; display: flex; align-items: center; justify-content: center; height: 100%;">
+      <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="var(--aqua)" stroke-width="0.8" opacity="0.6">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 6v6l4 2"/>
+      </svg>
+    </div>
   </div>
   <div class="program-content">
     <div class="prog-num">03</div>
-    <p class="section-label">Program Three</p>
-    <h2>Rapid Response<br><em>&amp; Crisis Intervention</em></h2>
-    <p>Our rapid response mechanisms address urgent cases of threats, arrests, violence, and forced displacement — mobilizing support within hours of a verified incident.</p>
+    <h2>Rapid Response & Crisis Intervention</h2>
+    <p>We maintain rapid response mechanisms to address urgent cases involving threats, arrests, violence, forced displacement, harassment, or attacks against human rights defenders and vulnerable individuals.</p>
     <ul class="service-list">
-      <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Incident monitoring and verification</li>
-      <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Emergency mobilization and referrals</li>
-      <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Rescue and protection interventions</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Monitor and verify incidents of abuse</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Mobilize emergency support and referrals</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Coordinate rescue and protection interventions</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Engage relevant stakeholders and authorities when necessary</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Provide crisis counseling and emotional support</li>
     </ul>
-    <a href="contact.html" class="btn-primary"><span>Report Incident</span></a>
+    <a href="contact.html" class="btn-primary">Request Support</a>
   </div>
 </div>
 
-<footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <p class="section-label" style="margin:0">Semena Center</p>
-      <p>Protecting the protectors. Emergency protection, legal aid, mental health support, and advocacy for human rights defenders.</p>
-    </div>
-    <div>
-      <h4>Navigate</h4>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="programs.html">Programs</a></li>
-        <li><a href="legal-aid.html">Legal Aid</a></li>
-        <li><a href="mental-health.html">Mental Health</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Contact</h4>
-      <ul>
-        <li><a href="contact.html">Get In Touch</a></li>
-        <li><a href="contact.html">Report an Emergency</a></li>
-        <li><a href="#">semenacenter.org</a></li>
-      </ul>
+<!-- CTA -->
+<section class="cta-band reveal">
+  <div class="container">
+    <p class="section-label">Take Action</p>
+    <h2>Stand With <em>Human Rights Defenders</em></h2>
+    <p>Every defender deserves protection. Join our network and help us build safer spaces for those advancing justice and dignity.</p>
+    <div class="cta-buttons">
+      <a href="contact.html" class="btn-primary btn-filled">Get Involved</a>
+      <a href="mental-health.html" class="btn-primary">Mental Health Support</a>
     </div>
   </div>
-  <div class="footer-bottom">
-    <span>&copy; 2025 Semena Center. All rights reserved.</span>
-    <span>semenacenter.org</span>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <p class="footer-logo-text">Semena Center</p>
+        <p>Protecting the protectors. Emergency protection, legal aid, mental health support, and advocacy for human rights defenders.</p>
+      </div>
+      <div>
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="legal-aid.html">Legal Aid</a></li>
+          <li><a href="mental-health.html">Mental Health</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="contact.html">Get In Touch</a></li>
+          <li><a href="mailto:info@semenacenter.org">info@semenacenter.org</a></li>
+          <li><a href="contact.html">Legal Aid Referrals</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2025 Semena Center. All rights reserved.</span>
+      <span>semenacenter.org</span>
+    </div>
   </div>
 </footer>
 
-<script>
-const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
-document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},60);});
-const ham=document.getElementById('hamburger'),drop=document.getElementById('navDropdown');
-ham.addEventListener('click',e=>{e.stopPropagation();toggle();});
-drop.addEventListener('click',()=>toggle());
-function toggle(){ham.classList.toggle('active');drop.classList.toggle('open');document.body.style.overflow=drop.classList.contains('open')?'hidden':'';}
-const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-const canvas=document.getElementById('fire-canvas'),ctx=canvas.getContext('2d');
-function resize(){canvas.width=window.innerWidth;canvas.height=260;}resize();window.addEventListener('resize',resize);
-const COLS=120,ROWS=50,fire=Array.from({length:COLS*ROWS},()=>0);
-function step(){for(let c=0;c<COLS;c++)fire[(ROWS-1)*COLS+c]=220+Math.random()*30|0;for(let r=ROWS-2;r>=0;r--)for(let c=0;c<COLS;c++){const b=(r+1)*COLS+((c+Math.round(Math.random()*2-1)+COLS)%COLS);fire[r*COLS+c]=Math.max(0,fire[b]-(Math.random()*18|0));}}
-function drawFire(){ctx.clearRect(0,0,canvas.width,canvas.height);const cw=canvas.width/COLS,ch=canvas.height/ROWS;for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const v=fire[r*COLS+c];if(!v)continue;const a=v/255;ctx.fillStyle=v>200?`rgba(255,255,220,${a})`:v>140?`rgba(255,160,20,${a})`:v>80?`rgba(200,40,45,${a})`:`rgba(120,10,10,${a})`;ctx.fillRect(c*cw,r*ch,cw+1,ch+1);}}
-function loop(){step();drawFire();requestAnimationFrame(loop);}loop();
-</script>
+<script src="main.js"></script>
 </body>
 </html>
