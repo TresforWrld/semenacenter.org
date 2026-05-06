@@ -1211,7 +1211,7 @@ function handleContactSubmit(event) {
 
   const mailSubject = subject && subject.value ? subject.value : 'General Inquiry';
   const mailBody = `Name: ${name.value}\nEmail: ${email.value}\n\n${message.value}`;
-  const mailtoLink = `mailto:info@semenacenter.org?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+  const mailtoLink = `mailto:defenders@semenacenter.org?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
 
   window.location.href = mailtoLink;
 }
